@@ -21,19 +21,16 @@ SRCS			=	ft_isalnum.c ft_isprint.c ft_memcmp.c  ft_putchar_fd.c ft_split.c \
 					ft_splitlen.c ft_splitfree.c ft_splitfree_error.c ft_str_isdigit.c \
 					ft_lst_contains_int.c ft_atoi_l.c ft_isspace.c ft_strcmp.c ft_realloc.c\
 					ft_strdup_n.c ft_check_for_overflow.c\
-					
-OBJS			= $(SRCS:.c=.o)
-
-BONUS			=	ft_lstadd_back.c ft_lstadd_front.c ft_lstclear.c \
+					ft_lstadd_back.c ft_lstadd_front.c ft_lstclear.c \
 					ft_lstdelone.c ft_lstiter.c ft_lstlast.c \
 					ft_lstmap.c ft_lstnew.c ft_lstsize.c
 
-BONUS_OBJS		= $(BONUS:.c=.o)
+					
+OBJS			= $(SRCS:.c=.o)
 
 CC				= cc -g 
 RM				= rm -f
 CFLAGS			= -Wall -Wextra -Werror -I.
-DEBUG_FLAGS		= -g -O0
 
 %.o: %.c
 			@$(CC) $(CFLAGS) -I. -c $(<) -o $(@)
@@ -46,24 +43,14 @@ $(NAME):		$(OBJS)
 				@ar rcs $(NAME) $(OBJS)
 				@echo "Libft compiled!"
 
-bonus:			.bonus
-
-.bonus:			${BONUS_OBJS}
-				@ar -rcs ${NAME} ${BONUS_OBJS}
-				@touch .bonus
-				@echo "Libft BONUS compiled!"
-
 clean:
 				@$(RM) $(OBJS) $(BONUS_OBJS)
-debug:			CFLAGS += $(DEBUG_FLAGS)
-debug:			fclean all
 				@echo "Libft compiled with debug flags!"
 
 fclean:			clean
 				@$(RM) $(NAME)
-				@$(RM) .bonus
 				@echo "Deep cleaned Libft!"
 
 re:				fclean $(NAME)
 
-.PHONY:			all clean fclean re bonus
+.PHONY:			all clean fclean re 

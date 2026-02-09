@@ -13,11 +13,14 @@
 #ifndef CUB3D_H
  #define CUB3D_H
 
+#include "structs.h"
 #include <stdio.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include "libft.h"
 #include "mapper.h"
-#include "structs.h"
 
+void	check_malloc(void *ptr, void *to_free, int fd);
+char	*get_next_line(int fd);
 
 #endif

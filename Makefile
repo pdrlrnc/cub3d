@@ -12,7 +12,7 @@
 
 NAME		= cub3d
 SRC_FILES	= \
-	cub3d input_validation
+	cub3d input_validation error_checker get_next_line
 
 SRC_DIR		= src
 OBJ_DIR		= obj
@@ -37,6 +37,7 @@ DEF_COLOUR=\033[0m
 
 
 all: $(NAME)
+	@echo "111111\n100101\n101001\n1100N1\n111111\n" > map.cub
 	@echo  "\n\
 		$(RED)            _      _____     _ $(DEF_COLOUR)\n\
 		$(RED)           | |    |____ |   | |$(DEF_COLOUR)\n\
@@ -66,6 +67,7 @@ clean:
 fclean: clean
 	@$(MAKE) -C $(LIBFT_DIR) fclean
 	@$(RM) $(NAME)
+	@$(RM) *.cub
 
 re: fclean all
 

@@ -13,7 +13,8 @@
 #ifndef MAPPER_H
 #define MAPPER_H
 
-
-int	validate_input(int argc, char**argv);
+int		validate_input(int argc, char**argv);
+int		validate_map(int map_fd);
+void	get_map(t_scene **scene, int map_fd);
 
 #endif
