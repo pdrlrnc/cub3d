@@ -16,7 +16,7 @@ int	validate_input(int argc, char**argv)
 {
 	if (argc != 2)
 	{
-		write(STDERR_FILENO, "You need to give a .cub map as input\n", 53);
+		write(STDERR_FILENO, "You need to give a .cub map as input\n", 37);
 		return (0);
 	}
 	if (ft_strlen(argv[1]) < 4 || ft_strcmp(ft_strrchr(argv[1], '.'), ".cub"))

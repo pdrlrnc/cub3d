@@ -16,6 +16,6 @@ int	main(int argc, char **argv)
 {
 	if (validate_input(argc, argv))
 	{
-		write(STDOUT_FILENO, "Input ok\n", 7);
+		write(STDOUT_FILENO, "Input ok\n", 9);
 	}
 }
