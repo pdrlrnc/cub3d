@@ -12,6 +12,19 @@
 
 #include "cub3d.h"
 
+/*
+ * Need to refactor:
+ *  - validate_input: should return the filled struct if the input is valid
+ *  or NULL and in that case the program should exit cleanly
+ *
+ *  - get_input_values: should also get the values for the textures and the RGB
+ *  for the ceiling and the sky
+ *
+ * - validate_map: implement floodfill to check if the map is okay. if not, clean
+ *   and return NULL. 
+ */
+
+
 int	validate_input(int argc, char**argv)
 {
 	int	fd;
@@ -41,12 +54,12 @@ int	validate_map(int map_fd)
 
 	scene = malloc(sizeof(t_scene));
 	check_malloc(scene, NULL, map_fd);
-	get_map(&scene, map_fd);
+	get_input_values(&scene, map_fd);
 	
 	return (map_fd);
 }
 
-void	get_map(t_scene **scene, int map_fd)
+void	get_input_values(t_scene **scene, int map_fd)
 {
 	char	*line;
 	t_list	*list;
@@ -78,4 +91,5 @@ void	get_map(t_scene **scene, int map_fd)
 		((*scene)->map)[i] = ft_strdup(aux->content);
 		aux = aux->next;
 	}
+	ft_lstclear(&list, free);
 }

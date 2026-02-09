@@ -60,12 +60,12 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 $(OBJ_DIR):
 	@mkdir -p $@
 clean:
-	@$(MAKE) -C $(LIBFT_DIR) clean
+	@$(MAKE) -C $(LIBFT_DIR) --no-print-directory clean
 	@$(RM) $(OBJ_DIR)
 	@$(RM) tags
 
 fclean: clean
-	@$(MAKE) -C $(LIBFT_DIR) fclean
+	@$(MAKE) -C $(LIBFT_DIR) --no-print-directory fclean
 	@$(RM) $(NAME)
 	@$(RM) *.cub
 

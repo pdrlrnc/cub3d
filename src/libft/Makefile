@@ -41,15 +41,12 @@ all:			$(NAME)
 
 $(NAME):		$(OBJS)
 				@ar rcs $(NAME) $(OBJS)
-				@echo "Libft compiled!"
 
 clean:
-				@$(RM) $(OBJS) $(BONUS_OBJS)
-				@echo "Libft compiled with debug flags!"
+				@$(RM) $(OBJS) 
 
 fclean:			clean
 				@$(RM) $(NAME)
-				@echo "Deep cleaned Libft!"
 
 re:				fclean $(NAME)
 
