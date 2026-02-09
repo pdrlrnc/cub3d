@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mapper.h                                           :+:      :+:    :+:   */
+/*   ft_putchar_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/09 11:47:53 by pedde-so          #+#    #+#             */
-/*   Updated: 2026/02/09 11:47:56 by pedde-so         ###   ########.fr       */
+/*   Created: 2025/04/09 12:33:08 by pedde-so          #+#    #+#             */
+/*   Updated: 2025/04/11 16:29:34 by pedde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MAPPER_H
-#define MAPPER_H
+#include "libft.h"
 
-
-int	validate_input(int argc, char**argv);
-
-#endif
+void	ft_putchar_fd(char c, int fd)
+{
+	write(fd, &c, 1);
+}

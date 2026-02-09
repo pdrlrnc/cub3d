@@ -1,22 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_strcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/09 12:00:48 by pedde-so          #+#    #+#             */
-/*   Updated: 2026/02/09 12:00:49 by pedde-so         ###   ########.fr       */
+/*   Created: 2025/08/26 10:43:26 by pedde-so          #+#    #+#             */
+/*   Updated: 2025/08/26 10:43:28 by pedde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "structs.h"
+#include "libft.h"
 
-int	main(void)
+int	ft_strcmp(char *str1, char *str2)
 {
 	int	i;
 
-	i = 10;
-	i *= 3;
-	return (i);
+	if (!str1 || !str2)
+		return (1);
+	i = 0;
+	while (*(str1 + i) && *(str2 + i))
+	{
+		if (*(str1 + i) != *(str2 + i))
+			return (*(str1 + i) - *(str2 + i));
+		i++;
+	}
+	return (*(str1 + i) - *(str2 + i));
 }

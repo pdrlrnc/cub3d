@@ -1,19 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mapper.h                                           :+:      :+:    :+:   */
+/*   input_validation.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/09 11:47:53 by pedde-so          #+#    #+#             */
-/*   Updated: 2026/02/09 11:47:56 by pedde-so         ###   ########.fr       */
+/*   Created: 2026/02/09 13:21:53 by pedde-so          #+#    #+#             */
+/*   Updated: 2026/02/09 13:22:04 by pedde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MAPPER_H
-#define MAPPER_H
+#include "cub3d.h"
 
-
-int	validate_input(int argc, char**argv);
-
-#endif
+int	validate_input(int argc, char**argv)
+{
+	if (argc != 2)
+	{
+		write(STDERR_FILENO, "You need to give a .cub map as input\n", 53);
+		return (0);
+	}
+	if (ft_strlen(argv[1]) < 4 || ft_strcmp(ft_strrchr(argv[1], '.'), ".cub"))
+	{
+		write(STDERR_FILENO, "Map must be *.cub\n", 18);
+		return (0);
+	}
+	return (1);
+}

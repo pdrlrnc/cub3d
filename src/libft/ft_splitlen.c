@@ -1,19 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mapper.h                                           :+:      :+:    :+:   */
+/*   ft_splitlen.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/09 11:47:53 by pedde-so          #+#    #+#             */
-/*   Updated: 2026/02/09 11:47:56 by pedde-so         ###   ########.fr       */
+/*   Created: 2025/08/10 10:28:47 by pedde-so          #+#    #+#             */
+/*   Updated: 2025/08/10 10:28:48 by pedde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MAPPER_H
-#define MAPPER_H
+#include "libft.h"
 
+int	ft_splitlen(char **split)
+{
+	int	i;
 
-int	validate_input(int argc, char**argv);
-
-#endif
+	i = 0;
+	while (split[i])
+		i++;
+	return (i);
+}

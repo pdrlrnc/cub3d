@@ -1,19 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mapper.h                                           :+:      :+:    :+:   */
+/*   ft_isspace.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/09 11:47:53 by pedde-so          #+#    #+#             */
-/*   Updated: 2026/02/09 11:47:56 by pedde-so         ###   ########.fr       */
+/*   Created: 2025/08/20 15:13:11 by pedde-so          #+#    #+#             */
+/*   Updated: 2025/08/20 15:13:12 by pedde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MAPPER_H
-#define MAPPER_H
-
-
-int	validate_input(int argc, char**argv);
-
-#endif
+int	ft_isspace(char c)
+{
+	if (c == ' ' || c == '\f' || c == '\n')
+		return (1);
+	if (c == '\r' || c == '\t' || c == '\v')
+		return (1);
+	return (0);
+}

@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mapper.h                                           :+:      :+:    :+:   */
+/*   ft_isalpha.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/09 11:47:53 by pedde-so          #+#    #+#             */
-/*   Updated: 2026/02/09 11:47:56 by pedde-so         ###   ########.fr       */
+/*   Created: 2025/04/06 11:31:18 by pedde-so          #+#    #+#             */
+/*   Updated: 2025/04/11 16:48:11 by pedde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MAPPER_H
-#define MAPPER_H
+#include "libft.h"
 
-
-int	validate_input(int argc, char**argv);
-
-#endif
+int	ft_isalpha(int c)
+{
+	return ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'));
+}

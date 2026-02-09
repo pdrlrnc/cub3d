@@ -1,19 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mapper.h                                           :+:      :+:    :+:   */
+/*   ft_strdup_n.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/09 11:47:53 by pedde-so          #+#    #+#             */
-/*   Updated: 2026/02/09 11:47:56 by pedde-so         ###   ########.fr       */
+/*   Created: 2025/10/19 12:56:27 by pedde-so          #+#    #+#             */
+/*   Updated: 2025/10/19 12:56:29 by pedde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MAPPER_H
-#define MAPPER_H
+#include "libft.h"
 
+char	*ft_strdup_n(const char *s, size_t n)
+{
+	size_t	i;
+	char	*result;
 
-int	validate_input(int argc, char**argv);
-
-#endif
+	if (!s)
+		return (NULL);
+	result = malloc(n + 1);
+	if (!result)
+		return (NULL);
+	i = 0;
+	while (i < n)
+	{
+		*(result + i) = *(s + i);
+		i++;
+	}
+	*(result + i) = '\0';
+	return (result);
+}

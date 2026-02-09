@@ -1,19 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mapper.h                                           :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/09 11:47:53 by pedde-so          #+#    #+#             */
-/*   Updated: 2026/02/09 11:47:56 by pedde-so         ###   ########.fr       */
+/*   Created: 2025/04/06 15:56:05 by pedde-so          #+#    #+#             */
+/*   Updated: 2025/04/15 18:06:58 by pedde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MAPPER_H
-#define MAPPER_H
+#include "libft.h"
 
+char	*ft_strchr(const char *s, int c)
+{
+	int	i;
 
-int	validate_input(int argc, char**argv);
-
-#endif
+	c = c % 256;
+	i = 0;
+	while (*(s + i))
+	{
+		if (*(s + i) == c)
+			return ((char *)(s + i));
+		i++;
+	}
+	if (c == 0)
+		return ((char *)(s + i));
+	return (NULL);
+}
