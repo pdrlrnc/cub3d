@@ -32,6 +32,9 @@ re: fclean all
 
 bonus:
 
+launch:
+	@clear && make re && make clean && ./cub3d
+
 download_mlx_linux: fclean
 	@curl https://cdn.intra.42.fr/document/document/44598/minilibx-linux.tgz -o minilibx && \
 	mkdir $(MLX_LIB) && \
@@ -40,4 +43,4 @@ download_mlx_linux: fclean
 	rm -rf minilibx minilibx-linux && \
 	make all -C $(MLX_LIB)
 
-.PHONY: all clean fclean re bonus download_mlx_linux
+.PHONY: all clean fclean re bonus download_mlx_linux launch
