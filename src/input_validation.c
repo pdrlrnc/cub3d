@@ -24,49 +24,37 @@
  *   and return NULL. 
  */
 
-
-int	validate_input(int argc, char**argv)
+t_scene	*validate_input(int argc, char**argv)
 {
 	int	fd;
+	t_scene	*scene;
 
 	if (argc != 2)
-	{
-		write(STDERR_FILENO, "You need to give a .cub map as input\n", 37);
-		return (0);
-	}
+		return (write(STDERR_FILENO, "You need to give a .cub map as input\n", 37), NULL);
 	if (ft_strlen(argv[1]) < 4 || ft_strcmp(ft_strrchr(argv[1], '.'), ".cub"))
-	{
-		write(STDERR_FILENO, "Map must be *.cub\n", 18);
-		return (0);
-	}
+		return (write(STDERR_FILENO, "Map must be *.cub\n", 18), NULL);
 	fd = open(argv[1], O_RDONLY);
 	if (fd < 0)
-	{
-		write (STDERR_FILENO, "Unknown error opening map file\n", 31);
-		return (0);
-	}
-	return (validate_map(fd));
+		return (write (STDERR_FILENO, "Unknown error opening map file\n", 31), NULL);
+	scene = get_bzeroed_scene();
+	return (validate_map(&(scene), fd));
 }
 
-int	validate_map(int map_fd)
+t_scene	*validate_map(t_scene **scene, int map_fd)
 {
-	t_scene *scene;
-
-	scene = malloc(sizeof(t_scene));
-	check_malloc(scene, NULL, map_fd);
-	get_input_values(&scene, map_fd);
+	print_scene(*scene);
+	get_input_values(scene, map_fd);
 	
-	return (map_fd);
+	return (*scene);
 }
 
 void	get_input_values(t_scene **scene, int map_fd)
 {
 	char	*line;
 	t_list	*list;
-	t_list	*aux;
-	int	i;
 
 	line = get_next_line(map_fd);
+	list = NULL;
 	while (line)
 	{
 		if (!list)
@@ -76,20 +64,52 @@ void	get_input_values(t_scene **scene, int map_fd)
 		free(line);
 		line = get_next_line(map_fd);
 	}
-	(*scene)->map = malloc(sizeof(char *) * (ft_lstsize(list) + 1));
-	check_malloc((*scene)->map, *scene, map_fd);
-	i = 0;
-	aux = list;
-	while (aux)
+	close(map_fd);
+	read_config_lines(scene, list);
+}
+
+void	read_config_lines(t_scene **scene, t_list *list)
+{
+	char	**split;
+
+	(void)scene;
+	while (list)
 	{
-		((*scene)->map)[i] = malloc(sizeof(char) * ft_strlen((char *)aux->content));
-		if (!((*scene)->map)[i])
-		{
-			ft_splitfree_error((*scene)->map, i);
-			check_malloc(NULL, *scene, map_fd);
-		}
-		((*scene)->map)[i] = ft_strdup(aux->content);
-		aux = aux->next;
+		split = ft_split((char *)list->content, ' ');
+		read_texture(scene, split);
+		list = list->next;
 	}
-	ft_lstclear(&list, free);
+}
+
+void	read_texture(t_scene **scene, char **split)
+{
+	if (ft_strcmp(split[0], "NO"))
+	{
+		(*scene)->textures.tex_no = ft_strdup(split[1]);
+		(*scene)->textures.has_no = 1;
+	}
+}
+
+t_scene	*get_bzeroed_scene(void)
+{
+	t_scene *scene;
+
+	scene = malloc(sizeof(t_scene));
+	check_malloc(scene, NULL, -1);
+	scene->map = NULL;
+	scene->map_w = -1;
+	scene->map_h = -1;
+	scene->px = -1;
+	scene->py = -1;
+	scene->textures.tex_no = NULL;
+	scene->textures.tex_so = NULL;
+	scene->textures.tex_we = NULL;
+	scene->textures.tex_ea = NULL;
+	scene->textures.has_no = -1;
+	scene->textures.has_so = -1;
+	scene->textures.has_we = -1;
+	scene->textures.has_ea = -1;
+	scene->sky_rgb = -1;	
+	scene->floor_rgb = -1;
+	return (scene);
 }

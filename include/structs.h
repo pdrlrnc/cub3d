@@ -15,20 +15,23 @@
 
 typedef enum e_direction
 {
-	NORTH,
-	SOUTH,
-	EAST,
-	WEST
-}		t_direction;
+	NO,
+	SO,
+	EA,
+	WE
+}	t_direction;
 
-typedef struct s_text
+typedef struct s_wall_tex
 {
-	char	*type;
 	char	*tex_no;
 	char	*tex_so;
 	char	*tex_we;
 	char	*tex_ea;
-}		t_text;
+	int	has_no;
+	int	has_so;
+	int	has_we;
+	int	has_ea;
+}		t_wall_tex;
 
 typedef struct s_scene
 {
@@ -38,7 +41,7 @@ typedef struct s_scene
 	double		px;
 	double		py;
 	t_direction	spawn_direction;
-	t_text		*textures;
+	t_wall_tex	textures;
 	int			floor_rgb;
 	int			sky_rgb;
 }		t_scene;

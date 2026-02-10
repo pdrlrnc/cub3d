@@ -12,7 +12,7 @@
 
 NAME		= cub3d
 SRC_FILES	= \
-	cub3d input_validation error_checker get_next_line
+	cub3d input_validation error_checker get_next_line _debug
 
 SRC_DIR		= src
 OBJ_DIR		= obj

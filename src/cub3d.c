@@ -14,8 +14,9 @@
 
 int	main(int argc, char **argv)
 {
-	if (validate_input(argc, argv))
-	{
+	t_scene	*scene;
+
+	scene = validate_input(argc, argv);
+	if (scene)
 		write(STDOUT_FILENO, "Input ok\n", 9);
-	}
 }
