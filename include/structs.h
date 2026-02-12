@@ -52,4 +52,10 @@ typedef struct s_scene
 	int			is_valid;
 }		t_scene;
 
+typedef struct s_point
+{
+	int	x;
+	int	y;
+}		t_point;
+
 #endif

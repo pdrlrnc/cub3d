@@ -12,18 +12,6 @@
 
 #include "cub3d.h"
 
-/*
- * Need to refactor:
- *  - validate_input: should return the filled struct if the input is valid
- *  or NULL and in that case the program should exit cleanly
- *
- *  - get_input_values: should also get the values for the textures and the RGB
- *  for the ceiling and the sky
- *
- * - validate_map: implement floodfill to check if the map is okay. if not, clean
- *   and return NULL. 
- */
-
 t_scene	*validate_input(int argc, char**argv)
 {
 	int	fd;
@@ -42,14 +30,20 @@ t_scene	*validate_input(int argc, char**argv)
 
 t_scene	*validate_map(t_scene **scene, int map_fd)
 {
+	t_list	*list;
+
 	print_scene(*scene);
-	get_input_values(scene, map_fd);
+	list = get_input_values_to_list(map_fd);
 	print_scene(*scene);
+	read_config_lines(scene, list);
+	read_map(scene, list);
+	ft_lstclear(&list, free);
+
 	
 	return (*scene);
 }
 
-void	get_input_values(t_scene **scene, int map_fd)
+t_list	*get_input_values_to_list(int map_fd)
 {
 	char	*line;
 	t_list	*list;
@@ -68,9 +62,8 @@ void	get_input_values(t_scene **scene, int map_fd)
 		line = get_next_line(map_fd);
 	}
 	close(map_fd);
-	read_config_lines(scene, list);
-	read_map(scene, list);
-	ft_lstclear(&list, free);
+	return (list);
+
 }
 
 int	read_map(t_scene **scene, t_list *list)
@@ -87,14 +80,127 @@ int	read_map(t_scene **scene, t_list *list)
 		}
 		if (!is_config_line((char *)list->content))
 		{
-			(*scene)->map[i] = ft_strdup((char *) list->content);
+			(*scene)->map[i] = normalize_line((char *) list->content, (*scene)->map_w);
 			read_player_position(scene, (char *) list->content, i);
 			i++;
 		}
 		list = list->next;
 	}
 	(*scene)->map[i] = NULL;
+	ft_splitfree(normalize_map(scene));
 	return (1);
+}
+
+char	**normalize_map(t_scene **scene)
+{
+	char	**normalized_map;
+	int	i;
+	int	j;
+	int	k;
+	int	l;
+
+	normalized_map = malloc(sizeof(char *) * ((*scene)->map_h + 3));
+	i = 0;
+	l = 0;
+	while (i < ((*scene)->map_h + 2))
+	{
+		normalized_map[i] = malloc(sizeof(char) * ((*scene)->map_w + 3));
+		j = 0;
+		if (i == 0 || i == ((*scene)->map_h + 1))
+		{
+			while (j < ((*scene)->map_w + 2))
+				normalized_map[i][j++] = 'V';
+		}
+		else
+		{
+			normalized_map[i][j++] = 'V';
+			k = 0;
+			while (k < (*scene)->map_w)
+			{
+				if ((*scene)->map[l][k] == ' ')
+					normalized_map[i][j] = 'V';
+				else
+					normalized_map[i][j] = (*scene)->map[l][k];
+				j++;
+				k++;
+			}
+			l++;
+			normalized_map[i][j++] = 'V';
+		}
+		normalized_map[i][j] = '\0';
+		i++;
+	}
+	normalized_map[i] = NULL;
+	printf("NORMALIZED MAP: \n");
+	print_map(normalized_map);
+	if (run_flood_fill(normalized_map, (*scene)->map_w + 2, (*scene)->map_h + 2))
+		printf("\n\tMAP OK\n\n");
+	else
+		printf("\n\tMAP NOK\n\n");
+	return (normalized_map);
+}
+
+int	is_walkable(char c)
+{
+	if (c == '0' || c == 'N' || c == 'S' || c == 'E' || c == 'W')
+		return (1);
+	return (0);
+}
+
+
+int	run_flood_fill(char **map, int width, int height)
+{
+	t_point	*stack;
+	t_point	curr;
+	int 	top;
+
+	stack = create_stack(0,0, width, height);
+	top = 0;
+	while (top > -1)
+	{
+		curr = pop(stack, top);
+		top--;
+		if (is_walkable(map[curr.x][curr.y]))
+		{
+			free(stack);
+			return (0);
+		}
+		if (map[curr.x][curr.y] == 'V')
+		{
+			map[curr.x][curr.y] = '*';
+			if ((curr.x + 1) < height && map[curr.x + 1][curr.y] != '*')
+				top = push(stack, top, curr.x + 1, curr.y);
+			if ((curr.y + 1) < width && map[curr.x][curr.y + 1] != '*')
+				top = push(stack, top, curr.x, curr.y + 1);
+			if ((curr.x - 1) >= 0 && map[curr.x - 1][curr.y] != '*')
+				top = push(stack, top, curr.x - 1, curr.y);
+			if ((curr.y - 1) >= 0 && map[curr.x][curr.y - 1] != '*')
+				top = push(stack, top, curr.x, curr.y - 1);
+		}
+	}
+	free(stack);
+	return (1);
+}
+
+char	*normalize_line(char *line, int map_w)
+{
+	char	*res;
+	int	i;
+
+	res = malloc(sizeof(char) * map_w + 1);
+	i = 0;
+	while (*(line + i))
+	{
+		*(res + i) = *(line + i);
+		i++;
+	}
+	while (i < map_w)
+	{
+		*(res + i) = ' ';
+		i++;
+	}
+	*(res + i) = '\0';
+	return (res);
 }
 
 void	read_player_position(t_scene **scene, char *line, int h)

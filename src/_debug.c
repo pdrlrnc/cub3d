@@ -42,7 +42,7 @@ void	print_map(char **map)
 	}
 	while (map[i])
 	{
-		printf("%s\n", map[i]);
+		printf("|%s|\n", map[i]);
 		i++;
 	}
 }

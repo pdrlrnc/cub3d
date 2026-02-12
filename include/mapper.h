@@ -17,7 +17,7 @@
 //input_validation.c
 t_scene	*validate_input(int argc, char**argv);
 t_scene	*validate_map(t_scene **scene, int map_fd);
-void	get_input_values(t_scene **scene, int map_fd);
+t_list	*get_input_values_to_list(int map_fd);
 t_scene	*get_bzeroed_scene(void);
 void	read_config_lines(t_scene **scene, t_list *list);
 int	read_texture(t_scene **scene, char **split);
@@ -30,6 +30,9 @@ int	is_sky_or_floor(char *line);
 int	is_texture_line(char *line);
 void	check_validity(t_scene **scene);
 void	clean_scene(t_scene *scene);
+char	*normalize_line(char *line, int map_w);
+int	run_flood_fill(char **map, int width, int height);
+char	**normalize_map(t_scene **scene);
 
 //_debug.c
 void	print_wall_tex(t_wall_tex wall_tex);
@@ -38,5 +41,11 @@ void	print_scene(t_scene *scene);
 void	read_width_and_height(t_scene **scene, t_list *list);
 void	print_map(char **map);
 
+//stack.c
+int	**get_bzeroed_visited(int width, int height);
+int	stack_is_empty(t_point	*stack);
+t_point	*create_stack(int x, int y, int width, int height);
+t_point	pop(t_point *stack, int top);
+int	push(t_point *stack, int top, int x, int y);
 
 #endif
