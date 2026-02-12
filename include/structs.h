@@ -18,7 +18,8 @@ typedef enum e_direction
 	NO,
 	SO,
 	EA,
-	WE
+	WE,
+	ERR
 }	t_direction;
 
 typedef struct s_wall_tex
@@ -48,6 +49,7 @@ typedef struct s_scene
 	int			sky_r;
 	int			sky_g;
 	int			sky_b;
+	int			is_valid;
 }		t_scene;
 
 #endif

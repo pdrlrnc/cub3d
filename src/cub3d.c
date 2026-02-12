@@ -18,5 +18,8 @@ int	main(int argc, char **argv)
 
 	scene = validate_input(argc, argv);
 	if (scene)
+	{
 		write(STDOUT_FILENO, "Input ok\n", 9);
+		clean_scene(scene);
+	}
 }

@@ -17,13 +17,6 @@ void	print_scene(t_scene *scene)
 	int	i;
 
 	i = 0;
-	printf("[MAP]\n");
-	if (scene->map)
-	{
-		while (scene->map[i])
-			printf("%s", scene->map[i]);
-		i++;
-	}
 	printf("\tMAP_W: %d, MAP_H: %d\n", scene->map_w, scene->map_h);
 	printf("\tPX: %f, PY: %f\n", scene->px, scene->py);
 	printf("\tSPAWN_DIRECTION: ");
@@ -33,6 +26,25 @@ void	print_scene(t_scene *scene)
 	printf("\tFLOOR_R[%d]G[%d]B[%d] \t SKY_R[%d]G[%d]B[%d]\n", 
 		scene->floor_r, scene->floor_g, scene->floor_b
 			,scene->sky_r, scene->sky_g, scene->sky_b);
+	printf("[MAP]\n");
+	print_map(scene->map);
+}
+
+void	print_map(char **map)
+{
+	int	i;
+
+	i = 0;
+	if (!map)
+	{
+		printf("[NULL]\n");
+		return ;
+	}
+	while (map[i])
+	{
+		printf("%s\n", map[i]);
+		i++;
+	}
 }
 
 void	print_direction(t_direction direction)

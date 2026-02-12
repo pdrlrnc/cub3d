@@ -70,6 +70,7 @@ void	get_input_values(t_scene **scene, int map_fd)
 	close(map_fd);
 	read_config_lines(scene, list);
 	read_map(scene, list);
+	ft_lstclear(&list, free);
 }
 
 int	read_map(t_scene **scene, t_list *list)
@@ -82,22 +83,72 @@ int	read_map(t_scene **scene, t_list *list)
 		if (!is_config_line((char *)list->content) && (*scene)->map_w == -1)
 		{
 			read_width_and_height(scene, list);
-			(*scene)->map = malloc(sizeof(char *) * (*scene)->map_h);
+			(*scene)->map = malloc(sizeof(char *) * ((*scene)->map_h + 1));
 		}
 		if (!is_config_line((char *)list->content))
+		{
 			(*scene)->map[i] = ft_strdup((char *) list->content);
+			read_player_position(scene, (char *) list->content, i);
+			i++;
+		}
 		list = list->next;
 	}
+	(*scene)->map[i] = NULL;
 	return (1);
+}
+
+void	read_player_position(t_scene **scene, char *line, int h)
+{
+	if (!ft_strchr(line, 'N') && !ft_strchr(line, 'S')
+		&& !ft_strchr(line, 'E') && !ft_strchr(line, 'W'))
+		return ;
+	if ((*scene)->spawn_direction != ERR)
+	{
+		(*scene)->is_valid = 0;
+		return ;
+	}
+	(*scene)->py = h;
+	if (ft_strchr(line, 'N'))
+	{
+		(*scene)->spawn_direction = NO;
+		(*scene)->px = ft_strchr(line, 'N') - line;
+	}
+	if (ft_strchr(line, 'S'))
+	{
+		(*scene)->spawn_direction = SO;
+		(*scene)->px = ft_strchr(line, 'S') - line;
+	}
+	if (ft_strchr(line, 'E'))
+	{
+		(*scene)->spawn_direction = EA;
+		(*scene)->px = ft_strchr(line, 'E') - line;
+	}
+	if (ft_strchr(line, 'W'))
+	{
+		(*scene)->spawn_direction = WE;
+		(*scene)->px = ft_strchr(line, 'W') - line;
+	}
 }
 
 int	is_config_line(char *line)
 {
-	if (*line != 'N' && *line != 'S' && *line != 'W'
-     			&& *line != 'E' && *line != 'F' && *line != 'C')
+	if (is_sky_or_floor(line) || is_texture_line(line))
+		return (1);
+	return (0);
+}
+
+int	is_sky_or_floor(char *line)
+{
+	if (*line != 'F' && *line != 'C')
 		return (0);
 	return (1);
+}
 
+int	is_texture_line(char *line)
+{
+	if (*line != 'N' && *line != 'S' && *line != 'W' && *line != 'E')
+		return (0);
+	return (1);
 }
 
 void	read_width_and_height(t_scene **scene, t_list *list)
@@ -122,14 +173,33 @@ void	read_config_lines(t_scene **scene, t_list *list)
 {
 	char	**split;
 
-	while (list)
+	while (list && is_texture_line((char *)list->content))
 	{
 		split = ft_split((char *)list->content, ' ');
 		read_texture(scene, split);
+		ft_splitfree(split);
+		list = list->next;
+	}
+	while (list && is_sky_or_floor((char *)list->content))
+	{
+		split = ft_split((char *)list->content, ' ');
 		read_colours(scene, split);
 		ft_splitfree(split);
 		list = list->next;
 	}
+	check_validity(scene);
+}
+
+void	check_validity(t_scene **scene)
+{
+	if (!(*scene)->textures.has_no || !(*scene)->textures.has_so
+     		|| !(*scene)->textures.has_ea || !(*scene)->textures.has_we)
+		(*scene)->is_valid = 0;
+	if ((*scene)->floor_r == -1 || (*scene)->floor_g == -1 || (*scene)->floor_b == -1)
+		(*scene)->is_valid = 0;
+	if ((*scene)->sky_r == -1 || (*scene)->sky_g == -1 || (*scene)->sky_b == -1)
+		(*scene)->is_valid = 0;
+
 }
 
 int	read_colours(t_scene **scene, char **split)
@@ -140,6 +210,9 @@ int	read_colours(t_scene **scene, char **split)
 	if (!ft_strcmp(split[0], "F"))
 	{
 		values = ft_split(split[1], ',');
+		if (!ft_str_isdigit(values[0]) || !ft_str_isdigit(values[1])
+				|| !ft_str_isdigit(values[2]))
+			return (0);
 		(*scene)->floor_r = ft_atoi(values[0]) % 255;
 		(*scene)->floor_g = ft_atoi(values[1]) % 255;
 		(*scene)->floor_b = ft_atoi(values[2]) % 255;
@@ -149,6 +222,9 @@ int	read_colours(t_scene **scene, char **split)
 	else if (!ft_strcmp(split[0], "C"))
 	{
 		values = ft_split(split[1], ',');
+		if (!ft_str_isdigit(values[0]) || !ft_str_isdigit(values[1])
+				|| !ft_str_isdigit(values[2]))
+			return (0);
 		(*scene)->sky_r = ft_atoi(values[0]) % 255;
 		(*scene)->sky_g = ft_atoi(values[1]) % 255;
 		(*scene)->sky_b = ft_atoi(values[2]) % 255;
@@ -198,6 +274,7 @@ t_scene	*get_bzeroed_scene(void)
 	scene->map_h = -1;
 	scene->px = -1;
 	scene->py = -1;
+	scene->spawn_direction = ERR;
 	scene->textures.tex_no = NULL;
 	scene->textures.tex_so = NULL;
 	scene->textures.tex_we = NULL;
@@ -206,11 +283,22 @@ t_scene	*get_bzeroed_scene(void)
 	scene->textures.has_so = -1;
 	scene->textures.has_we = -1;
 	scene->textures.has_ea = -1;
-	scene->floor_r = 0;
-	scene->floor_g = 0;
-	scene->floor_b = 0;
-	scene->sky_r = 0;
-	scene->sky_g = 0;
-	scene->sky_b = 0;
+	scene->floor_r = -1;
+	scene->floor_g = -1;
+	scene->floor_b = -1;
+	scene->sky_r = -1;
+	scene->sky_g = -1;
+	scene->sky_b = -1;
+	scene->is_valid = 1;
 	return (scene);
+}
+
+void	clean_scene(t_scene *scene)
+{
+	ft_splitfree(scene->map);
+	free(scene->textures.tex_no);
+	free(scene->textures.tex_so);
+	free(scene->textures.tex_we);
+	free(scene->textures.tex_ea);
+	free(scene);
 }
