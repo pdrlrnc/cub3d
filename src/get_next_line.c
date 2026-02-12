@@ -91,7 +91,7 @@ static char	*get_next_line_cont(int fd, char *buffer, char *result, int bytes_re
 			if (!result)
 				return (NULL);
 			buffer = ft_process_buffer(buffer, i + 1);
-			if (*(result + i) && i < 20)
+			if (ft_strchr(result, '\n'))
 				return (result);
 		}
 		bytes_read = read(fd, buffer, 20);
@@ -114,7 +114,7 @@ char	*get_next_line(int fd)
 	bytes_read = 1;
 	if (!buffer[0])
 		bytes_read = -2;
-	if (fd < 0 || fd >= FOPEN_MAX || 20 < 1)
+	if (fd < 0 || fd >= FOPEN_MAX)
 		return (NULL);
 	return (get_next_line_cont(fd, buffer, result, bytes_read));
 }

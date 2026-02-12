@@ -30,7 +30,9 @@ void	print_scene(t_scene *scene)
 	print_direction(scene->spawn_direction);
 	printf("\n");
 	print_wall_tex(scene->textures);
-	printf("\tFLOOR_RGB: %d, SKY_RGB: %d\n", scene->floor_rgb, scene->sky_rgb);
+	printf("\tFLOOR_R[%d]G[%d]B[%d] \t SKY_R[%d]G[%d]B[%d]\n", 
+		scene->floor_r, scene->floor_g, scene->floor_b
+			,scene->sky_r, scene->sky_g, scene->sky_b);
 }
 
 void	print_direction(t_direction direction)
@@ -48,19 +50,19 @@ void	print_direction(t_direction direction)
 void	print_wall_tex(t_wall_tex wall_tex)
 {
 	if (wall_tex.tex_no)
-		printf("%s", wall_tex.tex_no);
+		printf("Wall texture NORTH: %s\n", wall_tex.tex_no);
 	else
 		printf("\tTEXT_NO NULL\n");
 	if (wall_tex.tex_so)
-		printf("%s", wall_tex.tex_so);
+		printf("Wall texture SOUTH: %s\n", wall_tex.tex_so);
 	else
 		printf("\tTEXT_SO NULL\n");
 	if (wall_tex.tex_ea)
-		printf("%s", wall_tex.tex_ea);
+		printf("Wall texture EAST: %s\n", wall_tex.tex_ea);
 	else
 		printf("\tTEXT_EA NULL\n");
 	if (wall_tex.tex_we)
-		printf("%s", wall_tex.tex_we);
+		printf("Wall texture WEST: %s\n", wall_tex.tex_we);
 	else
 		printf("\tTEXT_WE NULL\n");
 }

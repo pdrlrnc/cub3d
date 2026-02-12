@@ -37,7 +37,7 @@ DEF_COLOUR=\033[0m
 
 
 all: $(NAME)
-	@echo "111111\n100101\n101001\n1100N1\n111111\n" > map.cub
+	@echo "NO ./path_to_the_north_texture\nSO ./path_to_the_south_texture\nWE ./path_to_the_west_texture\nEA ./path_to_the_east_texture\n\n\nF 220,100,0\nC 225,30,0\n\n\n111111\n100101\n101001\n1100N1\n111111\n" > map.cub
 	@echo  "\n\
 		$(RED)            _      _____     _ $(DEF_COLOUR)\n\
 		$(RED)           | |    |____ |   | |$(DEF_COLOUR)\n\

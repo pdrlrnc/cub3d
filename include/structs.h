@@ -42,8 +42,12 @@ typedef struct s_scene
 	double		py;
 	t_direction	spawn_direction;
 	t_wall_tex	textures;
-	int			floor_rgb;
-	int			sky_rgb;
+	int			floor_r;
+	int			floor_g;
+	int			floor_b;
+	int			sky_r;
+	int			sky_g;
+	int			sky_b;
 }		t_scene;
 
 #endif
