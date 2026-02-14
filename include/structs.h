@@ -57,6 +57,7 @@ typedef struct s_point
 {
 	int	x;
 	int	y;
+	int	top;
 }		t_point;
 
 #endif

@@ -13,7 +13,7 @@
 NAME		= cub3d
 SRC_FILES	= \
 	cub3d input_validation error_checker1 error_checker2 get_next_line stack reader1\
-	reader2 map_normalizer are_they checkers flood_fill _debug
+	reader2 map_normalizer are_they checkers flood_fill parser_utils _debug
 
 SRC_DIR		= src
 OBJ_DIR		= obj

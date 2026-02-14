@@ -14,7 +14,7 @@
 
 t_scene	*validate_input(int argc, char**argv)
 {
-	int	fd;
+	int		fd;
 	t_scene	*scene;
 
 	if (argc != 2)
@@ -60,7 +60,7 @@ t_scene	*validate_map(t_scene **scene, int map_fd)
 char	*normalize_line(char *line, int map_w)
 {
 	char	*res;
-	int	i;
+	int		i;
 
 	res = malloc(sizeof(char) * map_w + 1);
 	i = 0;
@@ -76,45 +76,4 @@ char	*normalize_line(char *line, int map_w)
 	}
 	*(res + i) = '\0';
 	return (res);
-}
-
-t_scene	*get_bzeroed_scene(void)
-{
-	t_scene *scene;
-
-	scene = malloc(sizeof(t_scene));
-	scene->map = NULL;
-	scene->input_list = NULL;
-	scene->map_w = -1;
-	scene->map_h = -1;
-	scene->px = -1;
-	scene->py = -1;
-	scene->spawn_direction = ERR;
-	scene->textures.tex_no = NULL;
-	scene->textures.tex_so = NULL;
-	scene->textures.tex_we = NULL;
-	scene->textures.tex_ea = NULL;
-	scene->textures.has_no = -1;
-	scene->textures.has_so = -1;
-	scene->textures.has_we = -1;
-	scene->textures.has_ea = -1;
-	scene->floor_r = -1;
-	scene->floor_g = -1;
-	scene->floor_b = -1;
-	scene->sky_r = -1;
-	scene->sky_g = -1;
-	scene->sky_b = -1;
-	scene->is_valid = 1;
-	return (scene);
-}
-
-void	clean_scene(t_scene *scene)
-{
-	ft_lstclear(&(scene->input_list), free);
-	ft_splitfree(scene->map);
-	free(scene->textures.tex_no);
-	free(scene->textures.tex_so);
-	free(scene->textures.tex_we);
-	free(scene->textures.tex_ea);
-	free(scene);
 }

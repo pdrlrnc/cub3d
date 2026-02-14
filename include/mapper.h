@@ -26,6 +26,7 @@ char	**normalize_map(t_scene **scene);
 
 //flood_fill.c
 int	run_flood_fill(t_scene **scene, char **map);
+void	found_v(t_scene **scene, t_point *stack, char **map, t_point curr);
 
 //reader1.c
 void	read_input_values_to_list(t_scene **scene, int map_fd);
@@ -66,10 +67,9 @@ void	check_inp_vals_ptr(t_scene *scene, t_list *list, int fd);
 void	check_stack_fl_fi(t_scene *scene, t_point *stack, char **map);
 
 //stack.c
-int	**get_bzeroed_visited(int width, int height);
-int	stack_is_empty(t_point	*stack);
 t_point	*create_stack(int x, int y, int width, int height);
 t_point	pop(t_point *stack, int top);
 int	push(t_point *stack, int top, int x, int y);
 
+int	**get_bzeroed_visited(int width, int height);
 #endif
