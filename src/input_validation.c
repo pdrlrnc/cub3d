@@ -18,102 +18,45 @@ t_scene	*validate_input(int argc, char**argv)
 	t_scene	*scene;
 
 	if (argc != 2)
-		return (write(STDERR_FILENO, "You need to give a .cub map as input\n", 37), NULL);
+	{
+		write(STDERR_FILENO, "You need to give a .cub map as input\n", 37);
+		exit(2);
+	}
 	if (ft_strlen(argv[1]) < 4 || ft_strcmp(ft_strrchr(argv[1], '.'), ".cub"))
-		return (write(STDERR_FILENO, "Map must be *.cub\n", 18), NULL);
+	{
+		write(STDERR_FILENO, "Map must be *.cub\n", 18);
+		exit(3);
+	}
 	fd = open(argv[1], O_RDONLY);
 	if (fd < 0)
-		return (write (STDERR_FILENO, "Unknown error opening map file\n", 31), NULL);
+	{
+		write (STDERR_FILENO, "Unknown error opening map file\n", 31);
+		exit(4);
+	}
 	scene = get_bzeroed_scene();
 	return (validate_map(&(scene), fd));
 }
 
 t_scene	*validate_map(t_scene **scene, int map_fd)
 {
-	print_scene(*scene);
-	get_input_values_to_list(scene, map_fd);
-	print_scene(*scene);
-	read_config_lines(scene, (*scene)->input_list);
-	check_validity(scene);
-	read_map(scene, (*scene)->input_list);
+	char	**normalized_map;
 
+	read_input_values_to_list(scene, map_fd);
+	read_config_lines(scene, (*scene)->input_list);
+	read_map(scene, (*scene)->input_list);
+	check_validity(scene);
+	if (!(*scene)->is_valid)
+		return (clean_scene(*scene), NULL);
+	normalized_map = normalize_map(scene);
+	if (!run_flood_fill(normalized_map, (*scene)->map_w + 2, (*scene)->map_h + 2))
+	{
+		ft_splitfree(normalized_map);
+		return (clean_scene(*scene), NULL);
+	}
+	ft_splitfree(normalized_map);
 	return (*scene);
 }
 
-void	get_input_values_to_list(t_scene **scene, int map_fd)
-{
-	char	*line;
-
-	line = get_next_line(map_fd);
-	while (line)
-	{
-		if (ft_strchr(line, '\n') && ft_strlen(line) > 1)
-			*(line + ft_strlen(line) - 1) = '\0';
-		if (!(*scene)->input_list)
-			(*scene)->input_list = ft_lstnew(ft_strdup(line));
-		else if (ft_strlen(line) > 1)
-			ft_lstadd_back(&(*scene)->input_list, ft_lstnew(ft_strdup(line)));
-		free(line);
-		line = get_next_line(map_fd);
-	}
-	close(map_fd);
-}
-
-char	**normalize_map(t_scene **scene)
-{
-	char	**normalized_map;
-	int	i;
-	int	j;
-	int	k;
-	int	l;
-
-	normalized_map = malloc(sizeof(char *) * ((*scene)->map_h + 3));
-	i = 0;
-	l = 0;
-	while (i < ((*scene)->map_h + 2))
-	{
-		normalized_map[i] = malloc(sizeof(char) * ((*scene)->map_w + 3));
-		j = 0;
-		if (i == 0 || i == ((*scene)->map_h + 1))
-		{
-			while (j < ((*scene)->map_w + 2))
-				normalized_map[i][j++] = 'V';
-		}
-		else
-		{
-			normalized_map[i][j++] = 'V';
-			k = 0;
-			while (k < (*scene)->map_w)
-			{
-				if ((*scene)->map[l][k] == ' ')
-					normalized_map[i][j] = 'V';
-				else
-					normalized_map[i][j] = (*scene)->map[l][k];
-				j++;
-				k++;
-			}
-			l++;
-			normalized_map[i][j++] = 'V';
-		}
-		normalized_map[i][j] = '\0';
-		i++;
-	}
-	normalized_map[i] = NULL;
-	printf("NORMALIZED MAP: \n");
-	print_map(normalized_map);
-	if (run_flood_fill(normalized_map, (*scene)->map_w + 2, (*scene)->map_h + 2))
-		printf("\n\tMAP OK\n\n");
-	else
-		printf("\n\tMAP NOK\n\n");
-	return (normalized_map);
-}
-
-int	is_walkable(char c)
-{
-	if (c == '0' || c == 'N' || c == 'S' || c == 'E' || c == 'W')
-		return (1);
-	return (0);
-}
 
 
 int	run_flood_fill(char **map, int width, int height)
@@ -171,27 +114,6 @@ char	*normalize_line(char *line, int map_w)
 	return (res);
 }
 
-int	is_config_line(char *line)
-{
-	if (is_sky_or_floor(line) || is_texture_line(line))
-		return (1);
-	return (0);
-}
-
-int	is_sky_or_floor(char *line)
-{
-	if (*line != 'F' && *line != 'C')
-		return (0);
-	return (1);
-}
-
-int	is_texture_line(char *line)
-{
-	if (*line != 'N' && *line != 'S' && *line != 'W' && *line != 'E')
-		return (0);
-	return (1);
-}
-
 void	check_validity(t_scene **scene)
 {
 	if (!(*scene)->textures.has_no || !(*scene)->textures.has_so
@@ -209,7 +131,6 @@ t_scene	*get_bzeroed_scene(void)
 	t_scene *scene;
 
 	scene = malloc(sizeof(t_scene));
-	check_malloc(scene, NULL, -1);
 	scene->map = NULL;
 	scene->input_list = NULL;
 	scene->map_w = -1;

@@ -20,10 +20,6 @@
 #include "structs.h"
 #include "mapper.h"
 
-void	check_malloc(void *ptr, void *to_free, int fd);
-void	check_colour_double_ptr(t_scene *scene, char **ptr, char **old_split);
-void	check_double_ptr(t_scene *scene, char **ptr);
-void	check_texture_ptr(t_scene *scene, char *ptr, char **split);
 char	*get_next_line(int fd);
 
 #endif

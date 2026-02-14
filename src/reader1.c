@@ -12,6 +12,28 @@
 
 #include "cub3d.h"
 
+void	read_input_values_to_list(t_scene **scene, int map_fd)
+{
+	char	*line;
+
+	line = get_next_line(map_fd);
+	while (line)
+	{
+		if (ft_strchr(line, '\n') && ft_strlen(line) > 1)
+			*(line + ft_strlen(line) - 1) = '\0';
+		if (!(*scene)->input_list)
+		{
+			(*scene)->input_list = ft_lstnew(ft_strdup(line));
+			check_inp_vals_ptr(*scene, (*scene)->input_list, map_fd);
+		}
+		else if (ft_strlen(line) > 1)
+			ft_lstadd_back(&(*scene)->input_list, ft_lstnew(ft_strdup(line)));
+		free(line);
+		line = get_next_line(map_fd);
+	}
+	close(map_fd);
+}
+
 void	read_config_lines(t_scene **scene, t_list *list)
 {
 	char	**split;
@@ -81,7 +103,7 @@ void	read_colours(t_scene **scene, char **split, char colour, char **splt)
 	values = NULL;
 	values = ft_split(split[1], ',');
 	check_colour_double_ptr(*scene, values, splt);
-	if (ft_splitlen(split) != 3 || !ft_str_isdigit(values[0])
+	if (ft_splitlen(values) != 3 || !ft_str_isdigit(values[0])
 		|| !ft_str_isdigit(values[1]) || !ft_str_isdigit(values[2]))
 		(*scene)->is_valid = 0;
 	else if (colour == 'F')
