@@ -30,65 +30,33 @@ t_scene	*validate_input(int argc, char**argv)
 
 t_scene	*validate_map(t_scene **scene, int map_fd)
 {
-	t_list	*list;
-
 	print_scene(*scene);
-	list = get_input_values_to_list(map_fd);
+	get_input_values_to_list(scene, map_fd);
 	print_scene(*scene);
-	read_config_lines(scene, list);
-	read_map(scene, list);
-	ft_lstclear(&list, free);
+	read_config_lines(scene, (*scene)->input_list);
+	check_validity(scene);
+	read_map(scene, (*scene)->input_list);
 
-	
 	return (*scene);
 }
 
-t_list	*get_input_values_to_list(int map_fd)
+void	get_input_values_to_list(t_scene **scene, int map_fd)
 {
 	char	*line;
-	t_list	*list;
 
 	line = get_next_line(map_fd);
-	list = NULL;
 	while (line)
 	{
 		if (ft_strchr(line, '\n') && ft_strlen(line) > 1)
 			*(line + ft_strlen(line) - 1) = '\0';
-		if (!list)
-			list = ft_lstnew(ft_strdup(line));
+		if (!(*scene)->input_list)
+			(*scene)->input_list = ft_lstnew(ft_strdup(line));
 		else if (ft_strlen(line) > 1)
-			ft_lstadd_back(&list, ft_lstnew(ft_strdup(line)));
+			ft_lstadd_back(&(*scene)->input_list, ft_lstnew(ft_strdup(line)));
 		free(line);
 		line = get_next_line(map_fd);
 	}
 	close(map_fd);
-	return (list);
-
-}
-
-int	read_map(t_scene **scene, t_list *list)
-{
-	int	i;
-
-	i = 0;
-	while (list)
-	{
-		if (!is_config_line((char *)list->content) && (*scene)->map_w == -1)
-		{
-			read_width_and_height(scene, list);
-			(*scene)->map = malloc(sizeof(char *) * ((*scene)->map_h + 1));
-		}
-		if (!is_config_line((char *)list->content))
-		{
-			(*scene)->map[i] = normalize_line((char *) list->content, (*scene)->map_w);
-			read_player_position(scene, (char *) list->content, i);
-			i++;
-		}
-		list = list->next;
-	}
-	(*scene)->map[i] = NULL;
-	ft_splitfree(normalize_map(scene));
-	return (1);
 }
 
 char	**normalize_map(t_scene **scene)
@@ -203,39 +171,6 @@ char	*normalize_line(char *line, int map_w)
 	return (res);
 }
 
-void	read_player_position(t_scene **scene, char *line, int h)
-{
-	if (!ft_strchr(line, 'N') && !ft_strchr(line, 'S')
-		&& !ft_strchr(line, 'E') && !ft_strchr(line, 'W'))
-		return ;
-	if ((*scene)->spawn_direction != ERR)
-	{
-		(*scene)->is_valid = 0;
-		return ;
-	}
-	(*scene)->py = h;
-	if (ft_strchr(line, 'N'))
-	{
-		(*scene)->spawn_direction = NO;
-		(*scene)->px = ft_strchr(line, 'N') - line;
-	}
-	if (ft_strchr(line, 'S'))
-	{
-		(*scene)->spawn_direction = SO;
-		(*scene)->px = ft_strchr(line, 'S') - line;
-	}
-	if (ft_strchr(line, 'E'))
-	{
-		(*scene)->spawn_direction = EA;
-		(*scene)->px = ft_strchr(line, 'E') - line;
-	}
-	if (ft_strchr(line, 'W'))
-	{
-		(*scene)->spawn_direction = WE;
-		(*scene)->px = ft_strchr(line, 'W') - line;
-	}
-}
-
 int	is_config_line(char *line)
 {
 	if (is_sky_or_floor(line) || is_texture_line(line))
@@ -257,45 +192,6 @@ int	is_texture_line(char *line)
 	return (1);
 }
 
-void	read_width_and_height(t_scene **scene, t_list *list)
-{
-	int	max_width;
-	int	max_height;
-
-	max_width = 0;
-	max_height = 0;
-	while (list)
-	{
-		if ((int)ft_strlen((char *)list->content) > max_width)
-			max_width = ft_strlen((char *)list->content);
-		max_height++;
-		list = list->next;
-	}
-	(*scene)->map_w = max_width;
-	(*scene)->map_h = max_height;
-}
-
-void	read_config_lines(t_scene **scene, t_list *list)
-{
-	char	**split;
-
-	while (list && is_texture_line((char *)list->content))
-	{
-		split = ft_split((char *)list->content, ' ');
-		read_texture(scene, split);
-		ft_splitfree(split);
-		list = list->next;
-	}
-	while (list && is_sky_or_floor((char *)list->content))
-	{
-		split = ft_split((char *)list->content, ' ');
-		read_colours(scene, split);
-		ft_splitfree(split);
-		list = list->next;
-	}
-	check_validity(scene);
-}
-
 void	check_validity(t_scene **scene)
 {
 	if (!(*scene)->textures.has_no || !(*scene)->textures.has_so
@@ -308,67 +204,6 @@ void	check_validity(t_scene **scene)
 
 }
 
-int	read_colours(t_scene **scene, char **split)
-{
-	char	**values;
-
-	values = NULL;
-	if (!ft_strcmp(split[0], "F"))
-	{
-		values = ft_split(split[1], ',');
-		if (!ft_str_isdigit(values[0]) || !ft_str_isdigit(values[1])
-				|| !ft_str_isdigit(values[2]))
-			return (0);
-		(*scene)->floor_r = ft_atoi(values[0]) % 255;
-		(*scene)->floor_g = ft_atoi(values[1]) % 255;
-		(*scene)->floor_b = ft_atoi(values[2]) % 255;
-		ft_splitfree(values);
-		return (1);
-	}
-	else if (!ft_strcmp(split[0], "C"))
-	{
-		values = ft_split(split[1], ',');
-		if (!ft_str_isdigit(values[0]) || !ft_str_isdigit(values[1])
-				|| !ft_str_isdigit(values[2]))
-			return (0);
-		(*scene)->sky_r = ft_atoi(values[0]) % 255;
-		(*scene)->sky_g = ft_atoi(values[1]) % 255;
-		(*scene)->sky_b = ft_atoi(values[2]) % 255;
-		ft_splitfree(values);
-		return (1);
-	}
-	return (0);
-}
-
-int	read_texture(t_scene **scene, char **split)
-{
-	if (!ft_strcmp(split[0], "NO"))
-	{
-		(*scene)->textures.tex_no = ft_strdup(split[1]);
-		(*scene)->textures.has_no = 1;
-		return (1);
-	}
-	else if (!ft_strcmp(split[0], "SO"))
-	{
-		(*scene)->textures.tex_so = ft_strdup(split[1]);
-		(*scene)->textures.has_so = 1;
-		return (1);
-	}
-	else if (!ft_strcmp(split[0], "EA"))
-	{
-		(*scene)->textures.tex_ea = ft_strdup(split[1]);
-		(*scene)->textures.has_ea = 1;
-		return (1);
-	}
-	else if (!ft_strcmp(split[0], "WE"))
-	{
-		(*scene)->textures.tex_we = ft_strdup(split[1]);
-		(*scene)->textures.has_we = 1;
-		return (1);
-	}
-	return (0);
-}
-
 t_scene	*get_bzeroed_scene(void)
 {
 	t_scene *scene;
@@ -376,6 +211,7 @@ t_scene	*get_bzeroed_scene(void)
 	scene = malloc(sizeof(t_scene));
 	check_malloc(scene, NULL, -1);
 	scene->map = NULL;
+	scene->input_list = NULL;
 	scene->map_w = -1;
 	scene->map_h = -1;
 	scene->px = -1;
@@ -401,6 +237,7 @@ t_scene	*get_bzeroed_scene(void)
 
 void	clean_scene(t_scene *scene)
 {
+	ft_lstclear(&(scene->input_list), free);
 	ft_splitfree(scene->map);
 	free(scene->textures.tex_no);
 	free(scene->textures.tex_so);

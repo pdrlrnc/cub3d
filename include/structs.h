@@ -37,6 +37,7 @@ typedef struct s_wall_tex
 typedef struct s_scene
 {
 	char		**map;
+	t_list		*input_list;
 	int			map_w;
 	int			map_h;
 	double		px;

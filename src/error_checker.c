@@ -27,3 +27,35 @@ void	check_malloc(void *ptr, void *to_free, int fd)
 		exit(1);
 	}
 }
+
+void	check_colour_double_ptr(t_scene *scene, char **ptr, char **old_split)
+{
+	if (!ptr)
+	{
+		write(STDERR_FILENO, MALLOC_ERR, 37);
+		ft_splitfree(old_split);
+		clean_scene(scene);
+		exit(1);
+	}
+}
+
+void	check_double_ptr(t_scene *scene, char **ptr)
+{
+	if (!ptr)
+	{
+		write(STDERR_FILENO, MALLOC_ERR, 37);
+		clean_scene(scene);
+		exit(1);
+	}
+}
+
+void	check_texture_ptr(t_scene *scene, char *ptr, char **split)
+{
+	if (!ptr)
+	{
+		write(STDERR_FILENO, MALLOC_ERR, 37);
+		ft_splitfree(split);
+		clean_scene(scene);
+		exit(1);
+	}
+}

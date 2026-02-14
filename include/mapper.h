@@ -11,20 +11,15 @@
 /* ************************************************************************** */
 
 #ifndef MAPPER_H
-#define MAPPER_H
+# define MAPPER_H
 
+# define MALLOC_ERR "Unknown error with memory allocation\n"
 
 //input_validation.c
 t_scene	*validate_input(int argc, char**argv);
 t_scene	*validate_map(t_scene **scene, int map_fd);
-t_list	*get_input_values_to_list(int map_fd);
+void	get_input_values_to_list(t_scene **scene, int map_fd);
 t_scene	*get_bzeroed_scene(void);
-void	read_config_lines(t_scene **scene, t_list *list);
-int	read_texture(t_scene **scene, char **split);
-int	read_colours(t_scene **scene, char **split);
-int	read_map(t_scene **scene, t_list *list);
-void	read_width_and_height(t_scene **scene, t_list *list);
-void	read_player_position(t_scene **scene, char *line, int h);
 int	is_config_line(char *line);
 int	is_sky_or_floor(char *line);
 int	is_texture_line(char *line);
@@ -33,6 +28,17 @@ void	clean_scene(t_scene *scene);
 char	*normalize_line(char *line, int map_w);
 int	run_flood_fill(char **map, int width, int height);
 char	**normalize_map(t_scene **scene);
+
+//reader1.c
+void	read_config_lines(t_scene **scene, t_list *list);
+void	read_colours(t_scene **scene, char **split, char colour, char **splt);
+void	read_texture(t_scene **scene, char **split);
+void	read_texture_cont(t_scene **scene, char **split);
+
+//reader2.c
+int	read_map(t_scene **scene, t_list *list);
+void	read_player_position(t_scene **scene, char *line);
+void	read_width_and_height(t_scene **scene, t_list *list);
 
 //_debug.c
 void	print_wall_tex(t_wall_tex wall_tex);

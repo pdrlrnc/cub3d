@@ -6,13 +6,14 @@
 #    By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/02/09 12:06:27 by pedde-so          #+#    #+#              #
-#    Updated: 2026/02/09 12:06:28 by pedde-so         ###   ########.fr        #
+#    Updated: 2026/02/14 14:44:34 by pedde-so         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME		= cub3d
 SRC_FILES	= \
-	cub3d input_validation error_checker get_next_line _debug stack
+	cub3d input_validation error_checker get_next_line _debug stack reader1\
+	reader2
 
 SRC_DIR		= src
 OBJ_DIR		= obj
