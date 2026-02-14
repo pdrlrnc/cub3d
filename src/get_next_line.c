@@ -74,7 +74,8 @@ static char	*ft_process_buffer(char *buff, int i)
 	return (buff);
 }
 
-static char	*get_next_line_cont(int fd, char *buffer, char *result, int bytes_read)
+static char	*get_next_line_cont(int fd, char *buffer,
+				char *result, int bytes_read)
 {
 	int	i;
 
@@ -99,8 +100,6 @@ static char	*get_next_line_cont(int fd, char *buffer, char *result, int bytes_re
 			return (free(result), NULL);
 		buffer[bytes_read] = '\0';
 	}
-	if (!bytes_read && !result)
-		return (NULL);
 	return (result);
 }
 

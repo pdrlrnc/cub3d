@@ -19,12 +19,13 @@
 t_scene	*validate_input(int argc, char**argv);
 t_scene	*validate_map(t_scene **scene, int map_fd);
 t_scene	*get_bzeroed_scene(void);
-
 void	check_validity(t_scene **scene);
 void	clean_scene(t_scene *scene);
 char	*normalize_line(char *line, int map_w);
-int	run_flood_fill(char **map, int width, int height);
 char	**normalize_map(t_scene **scene);
+
+//flood_fill.c
+int	run_flood_fill(t_scene **scene, char **map);
 
 //reader1.c
 void	read_input_values_to_list(t_scene **scene, int map_fd);
@@ -54,12 +55,15 @@ void	print_scene(t_scene *scene);
 void	read_width_and_height(t_scene **scene, t_list *list);
 void	print_map(char **map);
 
-//error_checker.c
+//error_checker1.c
 void	check_malloc(void *ptr, void *to_free, int fd);
 void	check_colour_double_ptr(t_scene *scene, char **ptr, char **old_split);
 void	check_double_ptr(t_scene *scene, char **ptr);
 void	check_texture_ptr(t_scene *scene, char *ptr, char **split);
 void	check_inp_vals_ptr(t_scene *scene, t_list *list, int fd);
+
+//error_checker2.c
+void	check_stack_fl_fi(t_scene *scene, t_point *stack, char **map);
 
 //stack.c
 int	**get_bzeroed_visited(int width, int height);

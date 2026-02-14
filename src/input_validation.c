@@ -48,49 +48,13 @@ t_scene	*validate_map(t_scene **scene, int map_fd)
 	if (!(*scene)->is_valid)
 		return (clean_scene(*scene), NULL);
 	normalized_map = normalize_map(scene);
-	if (!run_flood_fill(normalized_map, (*scene)->map_w + 2, (*scene)->map_h + 2))
+	if (!run_flood_fill(scene, normalized_map))
 	{
 		ft_splitfree(normalized_map);
 		return (clean_scene(*scene), NULL);
 	}
 	ft_splitfree(normalized_map);
 	return (*scene);
-}
-
-
-
-int	run_flood_fill(char **map, int width, int height)
-{
-	t_point	*stack;
-	t_point	curr;
-	int 	top;
-
-	stack = create_stack(0,0, width, height);
-	top = 0;
-	while (top > -1)
-	{
-		curr = pop(stack, top);
-		top--;
-		if (is_walkable(map[curr.x][curr.y]))
-		{
-			free(stack);
-			return (0);
-		}
-		if (map[curr.x][curr.y] == 'V')
-		{
-			map[curr.x][curr.y] = '*';
-			if ((curr.x + 1) < height && map[curr.x + 1][curr.y] != '*')
-				top = push(stack, top, curr.x + 1, curr.y);
-			if ((curr.y + 1) < width && map[curr.x][curr.y + 1] != '*')
-				top = push(stack, top, curr.x, curr.y + 1);
-			if ((curr.x - 1) >= 0 && map[curr.x - 1][curr.y] != '*')
-				top = push(stack, top, curr.x - 1, curr.y);
-			if ((curr.y - 1) >= 0 && map[curr.x][curr.y - 1] != '*')
-				top = push(stack, top, curr.x, curr.y - 1);
-		}
-	}
-	free(stack);
-	return (1);
 }
 
 char	*normalize_line(char *line, int map_w)
@@ -112,18 +76,6 @@ char	*normalize_line(char *line, int map_w)
 	}
 	*(res + i) = '\0';
 	return (res);
-}
-
-void	check_validity(t_scene **scene)
-{
-	if (!(*scene)->textures.has_no || !(*scene)->textures.has_so
-     		|| !(*scene)->textures.has_ea || !(*scene)->textures.has_we)
-		(*scene)->is_valid = 0;
-	if ((*scene)->floor_r == -1 || (*scene)->floor_g == -1 || (*scene)->floor_b == -1)
-		(*scene)->is_valid = 0;
-	if ((*scene)->sky_r == -1 || (*scene)->sky_g == -1 || (*scene)->sky_b == -1)
-		(*scene)->is_valid = 0;
-
 }
 
 t_scene	*get_bzeroed_scene(void)
