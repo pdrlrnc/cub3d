@@ -14,9 +14,11 @@
 
 char	**ft_splitfree_error(char **split, int i)
 {
-	while (--i)
+	while (i)
+	{
 		free(split[i]);
-	free(split[0]);
+		i--;
+	}
 	free(split);
 	return (NULL);
 }

@@ -60,4 +60,12 @@ typedef struct s_point
 	int	top;
 }		t_point;
 
+typedef struct s_norm_indexes
+{
+	int	i;
+	int	j;
+	int	k;
+	int	l;
+}		t_norm_indexes;
+
 #endif

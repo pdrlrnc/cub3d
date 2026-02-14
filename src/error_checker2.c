@@ -22,3 +22,14 @@ void	check_stack_fl_fi(t_scene *scene, t_point *stack, char **map)
 		exit(1);
 	}
 }
+
+void	check_norm_ptr(t_scene *scene, char **map, char *ptr, int i)
+{
+	if (!ptr)
+	{
+		write(STDERR_FILENO, MALLOC_ERR, 37);
+		ft_splitfree_error(map, i);
+		clean_scene(scene);
+		exit(1);
+	}
+}

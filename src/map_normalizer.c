@@ -12,45 +12,48 @@
 
 #include "cub3d.h"
 
+static void	normalize_map_cont(t_scene **scene,
+			t_norm_indexes *ind, char **normalized_map)
+{
+	normalized_map[ind->i][ind->j++] = 'V';
+	ind->k = 0;
+	while (ind->k < (*scene)->map_w)
+	{
+		if ((*scene)->map[ind->l][ind->k] == ' ')
+			normalized_map[ind->i][ind->j] = 'V';
+		else
+			normalized_map[ind->i][ind->j] = (*scene)->map[ind->l][ind->k];
+		ind->j++;
+		ind->k++;
+	}
+	ind->l++;
+	normalized_map[ind->i][ind->j++] = 'V';
+}
+
 char	**normalize_map(t_scene **scene)
 {
-	char	**normalized_map;
-	int	i;
-	int	j;
-	int	k;
-	int	l;
+	char			**normalized_map;
+	t_norm_indexes	ind;
 
 	normalized_map = malloc(sizeof(char *) * ((*scene)->map_h + 3));
-	i = 0;
-	l = 0;
-	while (i < ((*scene)->map_h + 2))
+	check_double_ptr(*scene, normalized_map);
+	ind.i = 0;
+	ind.l = 0;
+	while (ind.i < ((*scene)->map_h + 2))
 	{
-		normalized_map[i] = malloc(sizeof(char) * ((*scene)->map_w + 3));
-		j = 0;
-		if (i == 0 || i == ((*scene)->map_h + 1))
+		normalized_map[ind.i] = malloc(sizeof(char) * ((*scene)->map_w + 3));
+		check_norm_ptr(*scene, normalized_map, normalized_map[ind.i], ind.i);
+		ind.j = 0;
+		if (ind.i == 0 || ind.i == ((*scene)->map_h + 1))
 		{
-			while (j < ((*scene)->map_w + 2))
-				normalized_map[i][j++] = 'V';
+			while (ind.j < ((*scene)->map_w + 2))
+				normalized_map[ind.i][ind.j++] = 'V';
 		}
 		else
-		{
-			normalized_map[i][j++] = 'V';
-			k = 0;
-			while (k < (*scene)->map_w)
-			{
-				if ((*scene)->map[l][k] == ' ')
-					normalized_map[i][j] = 'V';
-				else
-					normalized_map[i][j] = (*scene)->map[l][k];
-				j++;
-				k++;
-			}
-			l++;
-			normalized_map[i][j++] = 'V';
-		}
-		normalized_map[i][j] = '\0';
-		i++;
+			normalize_map_cont(scene, &ind, normalized_map);
+		normalized_map[ind.i][ind.j] = '\0';
+		ind.i++;
 	}
-	normalized_map[i] = NULL;
+	normalized_map[ind.i] = NULL;
 	return (normalized_map);
 }

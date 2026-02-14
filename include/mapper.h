@@ -65,6 +65,7 @@ void	check_inp_vals_ptr(t_scene *scene, t_list *list, int fd);
 
 //error_checker2.c
 void	check_stack_fl_fi(t_scene *scene, t_point *stack, char **map);
+void	check_norm_ptr(t_scene *scene, char **map, char *ptr, int i);
 
 //stack.c
 t_point	*create_stack(int x, int y, int width, int height);
