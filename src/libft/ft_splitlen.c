@@ -17,6 +17,8 @@ int	ft_splitlen(char **split)
 	int	i;
 
 	i = 0;
+	if (!split || !split[0])
+		return (0);
 	while (split[i])
 		i++;
 	return (i);
