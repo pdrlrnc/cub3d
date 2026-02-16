@@ -51,6 +51,7 @@ typedef struct s_scene
 	int			sky_g;
 	int			sky_b;
 	int			is_valid;
+	char			**err_mess;
 }		t_scene;
 
 typedef struct s_point

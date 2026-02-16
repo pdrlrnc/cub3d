@@ -16,12 +16,12 @@ void	check_validity(t_scene **scene)
 {
 	if ((*scene)->textures.has_no != 1 || (*scene)->textures.has_so != 1
 		|| (*scene)->textures.has_ea != 1 || (*scene)->textures.has_we != 1)
-		(*scene)->is_valid = 0;
+		add_err(scene, MISS_INPUT_1);
 	if ((*scene)->floor_r == -1 || (*scene)->floor_g == -1
 		|| (*scene)->floor_b == -1)
-		(*scene)->is_valid = 0;
+		add_err(scene, MISS_INPUT_2);
 	if ((*scene)->sky_r == -1 || (*scene)->sky_g == -1 || (*scene)->sky_b == -1)
-		(*scene)->is_valid = 0;
+		add_err(scene, MISS_INPUT_3);
 }
 
 void	check_line_validity(t_scene **scene, char *line)
@@ -32,5 +32,5 @@ void	check_line_validity(t_scene **scene, char *line)
 	while (*(line + i) && is_valid_map_char(*(line + i)))
 		i++;
 	if (*(line + i))
-		(*scene)->is_valid = 0;
+		add_err(scene, MAP_ERR_2);
 }
