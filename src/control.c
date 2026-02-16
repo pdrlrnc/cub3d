@@ -1,4 +1,4 @@
-#include "../main.h"
+#include "main.h"
 
 typedef enum e_cmds {
 	ON_A			= 97,
@@ -78,10 +78,10 @@ int	game_loop(t_game *game)
 		game->perso.pos_x++;
 	if (game->keys.down)
 		game->perso.pos_y++;
-	memset(game->img.addr, 0, game->img.lsize * WIN_HEIGHT);
-	draw_map(&game->img, 0x00FF0000, game, 0);
-	render_perso(game, SIZE_PERSO);
-	mlx_put_image_to_window(game->mlx, game->mlx_win, game->img.img, WIN_WIDTH / 2 - ZOOM * 3, WIN_HEIGHT / 2 - ZOOM * 3);
+	// memset(game->img.addr, 0, game->img.lsize * WIN_HEIGHT);
+	// draw_map(&game->img, 0x00FF0000, game, 0);
+	// render_perso(game, SIZE_PERSO);
+	// mlx_put_image_to_window(game->mlx, game->mlx_win, game->img.img, WIN_WIDTH / 2 -  * 3, WIN_HEIGHT / 2 - ZOOM * 3);
 	return (1);
 }
 
