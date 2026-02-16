@@ -37,7 +37,9 @@ void	read_input_values_to_list(t_scene **scene, int map_fd)
 void	read_config_lines(t_scene **scene, t_list *list)
 {
 	char	**split;
+	int		i;
 
+	i = 0;
 	while (list && is_texture_line((char *)list->content))
 	{
 		split = ft_split((char *)list->content, ' ');
@@ -50,7 +52,10 @@ void	read_config_lines(t_scene **scene, t_list *list)
 	}
 	while (list && is_sky_or_floor((char *)list->content))
 	{
+		i++;
 		split = ft_split((char *)list->content, ' ');
+		if (ft_splitlen(split) != 2 || i > 2)
+			(*scene)->is_valid = 0;
 		check_double_ptr(*scene, split);
 		read_colours(scene, split, *((char *)list->content), split);
 		ft_splitfree(split);
@@ -64,15 +69,21 @@ void	read_texture(t_scene **scene, char **split)
 		return ;
 	if (!ft_strcmp(split[0], "NO"))
 	{
-		(*scene)->textures.tex_no = ft_strdup(split[1]);
-		check_texture_ptr(*scene, (*scene)->textures.tex_no, split);
-		(*scene)->textures.has_no = 1;
+		if (!(*scene)->textures.tex_no)
+		{
+			(*scene)->textures.tex_no = ft_strdup(split[1]);
+			check_texture_ptr(*scene, (*scene)->textures.tex_no, split);
+		}
+		(*scene)->textures.has_no++;
 	}
 	else if (!ft_strcmp(split[0], "SO"))
 	{
-		(*scene)->textures.tex_so = ft_strdup(split[1]);
-		check_texture_ptr(*scene, (*scene)->textures.tex_so, split);
-		(*scene)->textures.has_so = 1;
+		if (!(*scene)->textures.tex_so)
+		{
+			(*scene)->textures.tex_so = ft_strdup(split[1]);
+			check_texture_ptr(*scene, (*scene)->textures.tex_so, split);
+		}
+		(*scene)->textures.has_so++;
 	}
 	else
 		read_texture_cont(scene, split);
@@ -82,15 +93,21 @@ void	read_texture_cont(t_scene **scene, char **split)
 {
 	if (!ft_strcmp(split[0], "EA"))
 	{
-		(*scene)->textures.tex_ea = ft_strdup(split[1]);
-		check_texture_ptr(*scene, (*scene)->textures.tex_ea, split);
-		(*scene)->textures.has_ea = 1;
+		if (!(*scene)->textures.tex_ea)
+		{
+			(*scene)->textures.tex_ea = ft_strdup(split[1]);
+			check_texture_ptr(*scene, (*scene)->textures.tex_ea, split);
+		}
+		(*scene)->textures.has_ea++;
 	}
 	else if (!ft_strcmp(split[0], "WE"))
 	{
-		(*scene)->textures.tex_we = ft_strdup(split[1]);
-		check_texture_ptr(*scene, (*scene)->textures.tex_we, split);
-		(*scene)->textures.has_we = 1;
+		if (!(*scene)->textures.tex_we)
+		{
+			(*scene)->textures.tex_we = ft_strdup(split[1]);
+			check_texture_ptr(*scene, (*scene)->textures.tex_we, split);
+		}
+		(*scene)->textures.has_we++;
 	}
 	else
 		(*scene)->is_valid = 0;
@@ -100,6 +117,8 @@ void	read_colours(t_scene **scene, char **split, char colour, char **splt)
 {
 	char	**values;
 
+	if (!(*scene)->is_valid)
+		return ;
 	values = NULL;
 	values = ft_split(split[1], ',');
 	check_colour_double_ptr(*scene, values, splt);

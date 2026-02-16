@@ -14,9 +14,9 @@
 
 static void	get_bzeroed_scene_cont(t_scene *scene)
 {
-	scene->textures.has_so = -1;
-	scene->textures.has_we = -1;
-	scene->textures.has_ea = -1;
+	scene->textures.has_so = 0;
+	scene->textures.has_we = 0;
+	scene->textures.has_ea = 0;
 	scene->floor_r = -1;
 	scene->floor_g = -1;
 	scene->floor_b = -1;
@@ -42,7 +42,7 @@ t_scene	*get_bzeroed_scene(void)
 	scene->textures.tex_so = NULL;
 	scene->textures.tex_we = NULL;
 	scene->textures.tex_ea = NULL;
-	scene->textures.has_no = -1;
+	scene->textures.has_no = 0;
 	get_bzeroed_scene_cont(scene);
 	return (scene);
 }

@@ -14,8 +14,8 @@
 
 void	check_validity(t_scene **scene)
 {
-	if (!(*scene)->textures.has_no || !(*scene)->textures.has_so
-		|| !(*scene)->textures.has_ea || !(*scene)->textures.has_we)
+	if ((*scene)->textures.has_no != 1 || (*scene)->textures.has_so != 1
+		|| (*scene)->textures.has_ea != 1 || (*scene)->textures.has_we != 1)
 		(*scene)->is_valid = 0;
 	if ((*scene)->floor_r == -1 || (*scene)->floor_g == -1
 		|| (*scene)->floor_b == -1)
