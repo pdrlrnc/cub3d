@@ -23,6 +23,7 @@ void	check_validity(t_scene **scene);
 void	clean_scene(t_scene *scene);
 char	*normalize_line(char *line, int map_w);
 char	**normalize_map(t_scene **scene);
+void	check_line_validity(t_scene **scene, char *line);
 
 //flood_fill.c
 int	run_flood_fill(t_scene **scene, char **map);
@@ -40,7 +41,7 @@ void	read_map(t_scene **scene, t_list *list);
 void	read_player_position(t_scene **scene, char *line, int py);
 void	read_width_and_height(t_scene **scene, t_list *list);
 void	read_and_validate_play_pos(t_scene **scene, int pos, char *line, char p);
-void	check_line_validity(t_scene **scene, char *line);
+int	has_more_than_one_player(char *line, int i);
 
 //are_they.c
 int	is_valid_map_char(char c);

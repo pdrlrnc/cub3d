@@ -23,3 +23,14 @@ void	check_validity(t_scene **scene)
 	if ((*scene)->sky_r == -1 || (*scene)->sky_g == -1 || (*scene)->sky_b == -1)
 		(*scene)->is_valid = 0;
 }
+
+void	check_line_validity(t_scene **scene, char *line)
+{
+	int	i;
+
+	i = 0;
+	while (*(line + i) && is_valid_map_char(*(line + i)))
+		i++;
+	if (*(line + i))
+		(*scene)->is_valid = 0;
+}
