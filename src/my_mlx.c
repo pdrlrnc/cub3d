@@ -1,4 +1,4 @@
-#include "../main.h"
+#include "main.h"
 
 void	_put_pixel(t_img *img, int x, int y, int color)
 {
@@ -8,39 +8,74 @@ void	_put_pixel(t_img *img, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
-void	draw_wall(t_img *img, int x, int y, int size, int color)
+static void	drawh(t_game *game, int x1, int y1, int x2, int y2, int color)
 {
-	int init_x = x;
-	int init_y = y;
+	int		dx;
+	int		dy;
+	int		p;
+	int		dir;
 
-	while (x < init_x + size)
+	dx = x2 - x1;
+	dy = y2 - y1;
+	dir = 1;
+	if (dy < 0)
+		dir = -dir;
+	dy *= dir;
+	p = 2 * dy - dx;
+	while (x1 <= x2)
 	{
-		int y = init_y;
-		while (y < init_y + size)
-			_put_pixel(img, x, y++, color);
-		x++;
+		_put_pixel(&game->img, x1, y1, color);
+		if (p >= 0)
+		{
+			y1 = y1 + dir;
+			p = p - 2 * dx;
+		}
+		p = p + 2 * dy;
+		x1 = x1 + 1;
 	}
 }
 
-void	draw_perso(t_img *img, t_perso perso, int size, int color)
+static void	drawv(t_game *game, int x1, int y1, int x2, int y2, int color)
 {
-	int init_x = perso.pos_x;
-	int init_y = perso.pos_y;
+	int		dx;
+	int		dy;
+	int		p;
+	int		dir;
 
-	double rad = perso.angle * 3.14 / 180;
-	int i = -1;
-	while (++i < 20)
-		_put_pixel(img, perso.pos_x + cos(rad) * i, perso.pos_y + sin(rad) * i, color);
-	while (perso.pos_x - size / 2 < init_x + size / 2)
+	dx = x2 - x1;
+	dy = y2 - y1;
+	dir = 1;
+	if (dx < 0)
+		dir = -dir;
+	dx *= dir;
+	p = 2 * dx - dy;
+	while (y1 <= y2)
 	{
-		perso.pos_y = init_y;
-		while (perso.pos_y - size / 2 < init_y + size / 2)
-			_put_pixel(img, perso.pos_x - size / 2, perso.pos_y++ - size / 2, color);
-		perso.pos_x++;
+		_put_pixel(&game->img, x1, y1, color);
+		if (p >= 0)
+		{
+			x1 = x1 + dir;
+			p = p - 2 * dy;
+		}
+		p = p + 2 * dx;
+		y1 = y1 + 1;
 	}
 }
 
-void	render_perso(t_game *game, int size)
+void	put_line(t_game *game, int x1, int y1, int x2, int y2, int color)
 {
-	draw_perso(&game->img, game->perso, size, 0x00FFFFFF);
+	if (abs(x2 - x1) > abs(y2 - y1))
+	{
+		if (x1 > x2)
+			drawh(game, x1, y1, x2, y2, color);
+		else
+			drawh(game, x1, y1, x2, y2, color);
+	}
+	else
+	{
+		if (y1 > y2)
+			drawv(game, x1, y1, x2, y2, color);
+		else
+			drawv(game, x1, y1, x2, y2, color);
+	}
 }
