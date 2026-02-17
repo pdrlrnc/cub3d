@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   are_they.c                                         :+:      :+:    :+:   */
+/*   are_they1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pedde-so <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/14 17:36:20 by pedde-so          #+#    #+#             */
-/*   Updated: 2026/02/14 17:36:31 by pedde-so         ###   ########.fr       */
+/*   Created: 2026/02/16 13:43:03 by pedde-so          #+#    #+#             */
+/*   Updated: 2026/02/16 13:43:05 by pedde-so         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,32 @@ int	is_config_line(char *line)
 
 int	is_sky_or_floor(char *line)
 {
-	if (*line != 'F' && *line != 'C')
+	int	i;
+
+	i = 0;
+	while (*(line + i) && *(line + i) == ' ')
+		i++;
+	if (*(line + i) != 'F' && *(line + i) != 'C')
 		return (0);
 	return (1);
 }
 
 int	is_texture_line(char *line)
 {
-	if (*line != 'N' && *line != 'S' && *line != 'W' && *line != 'E')
+	int	i;
+
+	i = 0;
+	while (*(line + i) && *(line + i) == ' ')
+		i++;
+	if (!*(line + i) || (ft_strlen(line + i) < 2))
 		return (0);
-	return (1);
+	if (*(line + i) == 'N' && *(line + i + 1) == 'O')
+		return (1);
+	if (*(line + i) == 'S' && *(line + i + 1) == 'O')
+		return (1);
+	if (*(line + i) == 'E' && *(line + i + 1) == 'A')
+		return (1);
+	if (*(line + i) == 'W' && *(line + i + 1) == 'E')
+		return (1);
+	return (0);
 }
