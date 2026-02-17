@@ -23,9 +23,9 @@ void	print_scene(t_scene *scene)
 	print_direction(scene->spawn_direction);
 	printf("\n");
 	print_wall_tex(scene->textures);
-	printf("\tFLOOR_R[%d]G[%d]B[%d] \t SKY_R[%d]G[%d]B[%d]\n", 
-		scene->floor_r, scene->floor_g, scene->floor_b
-			,scene->sky_r, scene->sky_g, scene->sky_b);
+	printf("\tFLOOR_R[%d]G[%d]B[%d] \t SKY_R[%d]G[%d]B[%d]\n",
+		scene->floor_r, scene->floor_g, scene->floor_b,
+		scene->sky_r, scene->sky_g, scene->sky_b);
 	printf("[MAP]\n");
 	print_map(scene->map);
 }

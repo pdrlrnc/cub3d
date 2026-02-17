@@ -18,6 +18,7 @@ SRC_FILES	= \
 	my_mlx control main utils
 
 SRC_DIR		= src
+
 OBJ_DIR		= obj
 INC_DIR		= include
 
@@ -63,6 +64,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 
 $(OBJ_DIR):
 	@mkdir -p $@
+
 clean:
 	@$(MAKE) -C $(LIBFT_DIR) --no-print-directory clean
 	@$(RM) $(OBJ_DIR)

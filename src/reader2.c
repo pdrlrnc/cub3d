@@ -17,16 +17,19 @@ void	read_map(t_scene **scene, t_list *list)
 	int	i;
 
 	i = 0;
-	while (is_config_line((char *)list->content))
+	if (!(*scene)->is_valid)
+		return ;
+	while (is_config_line((char *)list->content)
+		|| !ft_strcmp((char *)list->content, "\n"))
 		list = list->next;
 	while (list)
 	{
+		if (!ft_strcmp((char *)list->content, "\n"))
+			add_err(scene, PARSE_ERR_2);
 		if ((*scene)->map_w == -1)
-		{
-			read_width_and_height(scene, list);
-			(*scene)->map = malloc(sizeof(char *) * ((*scene)->map_h + 1));
-			check_double_ptr(*scene, (*scene)->map);
-		}
+			(read_width_and_height(scene, list),
+				(*scene)->map = malloc(sizeof(char *) * ((*scene)->map_h + 1)),
+				check_double_ptr(*scene, (*scene)->map));
 		(*scene)->map[i] = normalize_line(
 				(char *) list->content, (*scene)->map_w);
 		check_line_validity(scene, (char *) list->content);
@@ -44,27 +47,29 @@ void	read_player_position(t_scene **scene, char *line, int py)
 		&& !ft_strchr(line, 'E') && !ft_strchr(line, 'W'))
 		return ;
 	if ((*scene)->spawn_direction != ERR)
-		(*scene)->is_valid = 0;
+		add_err(scene, MAP_ERR_3);
 	(*scene)->py = py;
 	if (ft_strchr(line, 'N'))
 		read_and_validate_play_pos(scene, ft_strchr(line, 'N') - line,
-			ft_strchr(line, 'N') + 1, 'N');
+			line, 'N');
 	else if (ft_strchr(line, 'S'))
 		read_and_validate_play_pos(scene, ft_strchr(line, 'S') - line,
-			ft_strchr(line, 'S') + 1, 'S');
+			line, 'S');
 	else if (ft_strchr(line, 'E'))
 		read_and_validate_play_pos(scene, ft_strchr(line, 'E') - line,
-			ft_strchr(line, 'E') + 1, 'E');
+			line, 'E');
 	else if (ft_strchr(line, 'W'))
 		read_and_validate_play_pos(scene,
-			ft_strchr(line, 'W') - line, ft_strchr(line, 'W') + 1, 'W');
+			ft_strchr(line, 'W') - line, line, 'W');
 }
 
 void	read_and_validate_play_pos(t_scene **scene, int pos, char *line, char p)
 {
-	if (ft_strchr(line, 'N') || ft_strchr(line, 'S') || ft_strchr(line, 'E')
-		|| ft_strchr(line, 'W'))
-		(*scene)->is_valid = 0;
+	int	i;
+
+	i = 0;
+	if (has_more_than_one_player(line, i))
+		add_err(scene, MAP_ERR_3);
 	else if (p == 'N')
 		(*scene)->spawn_direction = NO;
 	else if (p == 'S')
@@ -94,13 +99,30 @@ void	read_width_and_height(t_scene **scene, t_list *list)
 	(*scene)->map_h = max_height;
 }
 
-void	check_line_validity(t_scene **scene, char *line)
+int	has_more_than_one_player(char *line, int i)
 {
-	int	i;
+	int	has_n;
+	int	has_s;
+	int	has_e;
+	int	has_w;
 
-	i = 0;
-	while (*(line + i) && is_valid_map_char(*(line + i)))
+	has_n = 0;
+	has_s = 0;
+	has_e = 0;
+	has_w = 0;
+	while (*(line + i))
+	{
+		if (*(line + i) == 'N')
+			has_n++;
+		else if (*(line + i) == 'S')
+			has_s++;
+		else if (*(line + i) == 'E')
+			has_e++;
+		else if (*(line + i) == 'W')
+			has_w++;
 		i++;
-	if (*(line + i))
-		(*scene)->is_valid = 0;
+	}
+	if ((has_n + has_s + has_e + has_w) > 1)
+		return (1);
+	return (0);
 }
