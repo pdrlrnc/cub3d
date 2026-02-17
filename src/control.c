@@ -1,8 +1,6 @@
 #include "main.h"
 
 typedef enum e_cmds {
-	ON_A			= 97,
-	ON_D			= 100,
 	ON_LEFT			= 65361,
 	ON_UP			= 65362,
 	ON_RIGHT		= 65363,
@@ -21,14 +19,7 @@ static int	_close(t_game *game)
 
 int	key_press(int keycode, t_game *game)
 {
-	if (keycode == ON_ESC)
-		_close(game);
 	printf("KEYCODE=%d\n", keycode);
-	printf("ANGLE=%d\n", game->perso.angle);
-	if (keycode == ON_A)
-		game->keys.a = 1;
-	if (keycode == ON_D)
-		game->keys.d = 1;
 	if (keycode == ON_LEFT)
 		game->keys.left = 1;
 	if (keycode == ON_UP)
@@ -42,10 +33,8 @@ int	key_press(int keycode, t_game *game)
 
 int	key_release(int keycode, t_game *game)
 {
-	if (keycode == ON_A)
-		game->keys.a = 0;
-	if (keycode == ON_D)
-		game->keys.d = 0;
+	if (keycode == ON_ESC)
+		_close(game);
 	if (keycode == ON_LEFT)
 		game->keys.left = 0;
 	if (keycode == ON_UP)
@@ -61,27 +50,33 @@ int	game_loop(t_game *game)
 {
 	usleep(SPEED);
 
-	if (game->perso.angle > 360)
-		game->perso.angle = 0;
-	if (game->perso.angle < 0)
-		game->perso.angle = 360;
-	if (game->keys.a)
-		game->perso.angle -= 5;
-	if (game->keys.d)
-		game->perso.angle += 5;
-
 	if (game->keys.left)
-		game->perso.pos_x--;
-	if (game->keys.up)
-		game->perso.pos_y--;
+		game->perso.angle -= 5;
 	if (game->keys.right)
-		game->perso.pos_x++;
+		game->perso.angle += 5;
+	if (game->perso.angle >= 360)
+		game->perso.angle -= 360;
+	if (game->perso.angle < 0)
+		game->perso.angle += 360;
+
+	printf("ANGLE=%d\n", game->perso.angle);
+	double rad = game->perso.angle * M_PI / 180;
+	if (game->keys.up)
+	{
+		game->perso.pos_x += cos(rad);
+		game->perso.pos_y += sin(rad);
+	}
 	if (game->keys.down)
-		game->perso.pos_y++;
-	// memset(game->img.addr, 0, game->img.lsize * WIN_HEIGHT);
-	// draw_map(&game->img, 0x00FF0000, game, 0);
-	// render_perso(game, SIZE_PERSO);
-	// mlx_put_image_to_window(game->mlx, game->mlx_win, game->img.img, WIN_WIDTH / 2 -  * 3, WIN_HEIGHT / 2 - ZOOM * 3);
+	{
+		game->perso.pos_x -= cos(rad);
+		game->perso.pos_y -= sin(rad);
+	}
+	memset(game->img.addr, 0, game->img.lsize * WIN_HEIGHT);
+	draw_containers(&game->img, 0x00FF0000, game);
+	draw_2d_map(&game->img, 0x00FFFFFF, game);
+	draw_2d_grid(&game->img, 0x00FF0000, game);
+	draw_2d_perso(&game->img, 0x00FF0000 - 10000, game);
+	mlx_put_image_to_window(game->mlx, game->mlx_win, game->img.img, 0, 0);
 	return (1);
 }
 
