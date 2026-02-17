@@ -21,7 +21,7 @@
 # define MISS_INPUT_2 "Floor rgb is invalid\n"
 # define MISS_INPUT_3 "Ceiling rgb is invalid\n"
 # define MISS_INPUT_4 "No player spawn given\n"
-# define WEIRD_INPUT_1 "RGB is invalid\n"
+# define WEIRD_INPUT_1 "Colour line is invalid\n"
 # define WEIRD_INPUT_2 "Texture line is invalid\n"
 # define COLOUR_ERR_1 "Each rgb for ceiling and floor should be in the rgb range [0, 255]\n"
 # define MAP_ERR_1 "Map isn't valid - there is a leak somewhere\n"

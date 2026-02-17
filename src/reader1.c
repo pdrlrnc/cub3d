@@ -22,7 +22,7 @@ void	read_input_values_to_list(t_scene **scene, int map_fd)
 		if (ft_strchr(line, '\n') && ft_strlen(line) > 1)
 			*(line + ft_strlen(line) - 1) = '\0';
 		if (!is_valid_line(line))
-			add_err(scene, PARSE_ERR_3); 
+			add_err(scene, PARSE_ERR_3);
 		if (is_sky_or_floor(line) || is_texture_line(line))
 			line = trim_line(scene, line, map_fd);
 		if (!(*scene)->input_list)
@@ -41,9 +41,7 @@ void	read_input_values_to_list(t_scene **scene, int map_fd)
 void	read_config_lines(t_scene **scene, t_list *list)
 {
 	char	**split;
-	int		i;
 
-	i = 0;
 	if (!(*scene)->is_valid)
 		return ;
 	while (list && (*scene)->is_valid)
@@ -51,16 +49,12 @@ void	read_config_lines(t_scene **scene, t_list *list)
 		if (is_texture_line((char *)list->content))
 		{
 			split = ft_split((char *)list->content, ' ');
-			check_double_ptr(*scene, split);
-			read_texture(scene, split);
+			(check_double_ptr(*scene, split), read_texture(scene, split));
 			ft_splitfree(split);
 		}
 		if (is_sky_or_floor((char *)list->content))
 		{
-			i++;
 			split = ft_split((char *)list->content, ' ');
-			if (ft_splitlen(split) != 2 || i > 2)
-				add_err(scene, WEIRD_INPUT_1);
 			check_double_ptr(*scene, split);
 			read_colours(scene, split, *((char *)list->content), split);
 			ft_splitfree(split);
@@ -126,24 +120,25 @@ void	read_colours(t_scene **scene, char **split, char colour, char **splt)
 
 	if (ft_splitlen(split) != 2)
 		return ;
-	values = NULL;
 	values = ft_split(split[1], ',');
 	check_colour_double_ptr(*scene, values, splt);
 	values = trim_colours(scene, values, split);
 	if (ft_splitlen(values) != 3 || !ft_str_isdigit(values[0])
 		|| !ft_str_isdigit(values[1]) || !ft_str_isdigit(values[2]))
 		add_err(scene, WEIRD_INPUT_1);
-	else if (colour == 'F')
+	else if (colour == 'F' && ((*scene)->floor_r == -1))
 	{
 		(*scene)->floor_r = ft_atoi(values[0]);
 		(*scene)->floor_g = ft_atoi(values[1]);
 		(*scene)->floor_b = ft_atoi(values[2]);
 	}
-	else if (colour == 'C')
+	else if (colour == 'C' && ((*scene)->sky_r == -1))
 	{
 		(*scene)->sky_r = ft_atoi(values[0]);
 		(*scene)->sky_g = ft_atoi(values[1]);
 		(*scene)->sky_b = ft_atoi(values[2]);
 	}
+	else
+		add_err(scene, WEIRD_INPUT_1);
 	ft_splitfree(values);
 }

@@ -58,7 +58,8 @@ void	print_err(t_scene *scene)
 	}
 }
 
-void	check_colour_trim_ptr(t_scene *scene, char **res, char **rgb, char **og_split)
+void	check_colour_trim_ptr(t_scene *scene, char **res,
+				char **rgb, char **og_split)
 {
 	if (!res)
 	{

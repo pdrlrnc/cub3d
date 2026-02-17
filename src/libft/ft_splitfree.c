@@ -26,4 +26,5 @@ void	ft_splitfree(char **split)
 		i++;
 	}
 	free(split);
+	split = NULL;
 }

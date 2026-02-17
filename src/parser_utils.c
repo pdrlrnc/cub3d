@@ -43,19 +43,12 @@ t_scene	*get_bzeroed_scene(void)
 
 	scene = malloc(sizeof(t_scene));
 	if (!scene)
-	{
-		write(STDERR_FILENO, MALLOC_ERR, 37);
-		exit(1);
-	}
-	scene->err_mess = malloc(sizeof(char *) * 4);
+		(write(STDERR_FILENO, MALLOC_ERR, 37), exit(1));
+	scene->err_mess = malloc(sizeof(char *) * 12);
 	if (!scene->err_mess)
-	{
-		free(scene);
-		write(STDERR_FILENO, MALLOC_ERR, 37);
-		exit(1);
-	}
+		(free(scene), write(STDERR_FILENO, MALLOC_ERR, 37), exit(1));
 	i = 0;
-	while (i < 4)
+	while (i < 12)
 	{
 		scene->err_mess[i] = NULL;
 		i++;
@@ -88,13 +81,20 @@ char	**trim_colours(t_scene **scene, char **rgb, char **original_split)
 	check_colour_trim_ptr(*scene, res, rgb, original_split);
 	res[0] = ft_strtrim(rgb[0], " ");
 	if (!res[0])
-		ft_splitfree_error(rgb, 0), check_colour_trim_ptr(*scene, NULL, rgb, original_split);
+		(ft_splitfree_error(rgb, 0), check_colour_trim_ptr(*scene,
+				NULL, rgb, original_split));
 	res[1] = ft_strtrim(rgb[1], " ");
 	if (!res[1])
-		ft_splitfree_error(rgb, 1), check_colour_trim_ptr(*scene, NULL, rgb, original_split);
+	{
+		ft_splitfree_error(rgb, 1);
+		check_colour_trim_ptr(*scene, NULL, rgb, original_split);
+	}
 	res[2] = ft_strtrim(rgb[2], " ");
 	if (!res[2])
-		ft_splitfree_error(rgb, 2), check_colour_trim_ptr(*scene, NULL, rgb, original_split);
+	{
+		ft_splitfree_error(rgb, 2);
+		check_colour_trim_ptr(*scene, NULL, rgb, original_split);
+	}
 	res[3] = NULL;
 	ft_splitfree(rgb);
 	return (res);
@@ -103,8 +103,8 @@ char	**trim_colours(t_scene **scene, char **rgb, char **original_split)
 char	*trim_line(t_scene **scene, char *line, int fd)
 {
 	char	*res;
-	int	i;
-	int	j;
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;

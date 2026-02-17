@@ -27,11 +27,9 @@ void	read_map(t_scene **scene, t_list *list)
 		if (!ft_strcmp((char *)list->content, "\n"))
 			add_err(scene, PARSE_ERR_2);
 		if ((*scene)->map_w == -1)
-		{
-			read_width_and_height(scene, list);
-			(*scene)->map = malloc(sizeof(char *) * ((*scene)->map_h + 1));
-			check_double_ptr(*scene, (*scene)->map);
-		}
+			(read_width_and_height(scene, list),
+				(*scene)->map = malloc(sizeof(char *) * ((*scene)->map_h + 1)),
+				check_double_ptr(*scene, (*scene)->map));
 		(*scene)->map[i] = normalize_line(
 				(char *) list->content, (*scene)->map_w);
 		check_line_validity(scene, (char *) list->content);

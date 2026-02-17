@@ -23,7 +23,7 @@ int	is_map_line(char *line)
 	{
 		if (!is_valid_map_char(*(line + i)))
 			return (0);
-		i++;	
+		i++;
 	}
 	return (1);
 }
