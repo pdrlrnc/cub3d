@@ -46,12 +46,13 @@ t_scene	*validate_map(t_scene **scene, int map_fd)
 	read_map(scene, (*scene)->input_list);
 	check_validity(scene);
 	if (!(*scene)->is_valid)
-		return (clean_scene(*scene), NULL);
+		return (print_err(*scene), clean_scene(*scene), NULL);
 	normalized_map = normalize_map(scene);
 	if (!run_flood_fill(scene, normalized_map))
 	{
+		add_err(scene, MAP_ERR_1);
 		ft_splitfree(normalized_map);
-		return (clean_scene(*scene), NULL);
+		return (print_err(*scene), clean_scene(*scene), NULL);
 	}
 	ft_splitfree(normalized_map);
 	return (*scene);

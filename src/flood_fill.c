@@ -28,7 +28,7 @@ int	run_flood_fill(t_scene **scene, char **map)
 			found_v(scene, stack, map, curr);
 	}
 	free(stack);
-	return (1);
+	return (inside_checker(scene, map));
 }
 
 void	found_v(t_scene **scene, t_point *stack, char **map, t_point curr)
@@ -42,4 +42,33 @@ void	found_v(t_scene **scene, t_point *stack, char **map, t_point curr)
 		push(stack, stack->top, curr.x - 1, curr.y);
 	if ((curr.y - 1) >= 0 && map[curr.x][curr.y - 1] != '*')
 		push(stack, stack->top, curr.x, curr.y - 1);
+}
+
+int	inside_checker(t_scene **scene, char **map)
+{
+	int	i;
+	int	j;
+
+	j = 0;
+	while (j < ((*scene)->map_h + 2))
+	{
+		i = 0;
+		while (i < ((*scene)->map_w + 2))
+		{
+			if (map[j][i] == '0')
+			{
+				if (((j - 1) >= 0) && map[j - 1][i] == 'V')
+					return (0);
+				if (((j + 1) <= ((*scene)->map_h)) && map[j + 1][i] == 'V')
+					return (0);
+				if (((i - 1) >= 0) && map[j][i -1] == 'V')
+					return (0);
+				if (((i + 1) <= ((*scene)->map_w)) && map[j][i + 1] == 'V')
+					return (0);
+			}
+			i++;
+		}
+		j++;
+	}
+	return (1);
 }
