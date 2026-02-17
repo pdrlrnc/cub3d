@@ -108,7 +108,7 @@ char	*trim_line(t_scene **scene, char *line, int fd)
 
 	i = 0;
 	j = 0;
-	res = malloc(sizeof(char) * ft_strlen(line));
+	res = malloc(sizeof(char) * (ft_strlen(line) + 1 + 2));
 	check_line_trim_ptr(*scene, res, fd);
 	i = 0;
 	j = 0;

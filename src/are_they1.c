@@ -53,7 +53,15 @@ int	is_texture_line(char *line)
 	i = 0;
 	while (*(line + i) && *(line + i) == ' ')
 		i++;
-	if (*(line + i) != 'N' && *(line + i) != 'S' && *(line + i) != 'W' && *(line + i) != 'E')
+	if (!*(line + i) || (ft_strlen(line + i) < 2))
 		return (0);
-	return (1);
+	if (*(line + i) == 'N' && *(line + i + 1) == 'O')
+		return (1);
+	if (*(line + i) == 'S' && *(line + i + 1) == 'O')
+		return (1);
+	if (*(line + i) == 'E' && *(line + i + 1) == 'A')
+		return (1);
+	if (*(line + i) == 'W' && *(line + i + 1) == 'E')
+		return (1);
+	return (0);
 }

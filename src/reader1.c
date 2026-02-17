@@ -19,10 +19,12 @@ void	read_input_values_to_list(t_scene **scene, int map_fd)
 	line = get_next_line(map_fd);
 	while (line)
 	{
-		if (is_sky_or_floor(line) || is_texture_line(line))
-			line = trim_line(scene, line, map_fd);
 		if (ft_strchr(line, '\n') && ft_strlen(line) > 1)
 			*(line + ft_strlen(line) - 1) = '\0';
+		if (!is_valid_line(line))
+			add_err(scene, PARSE_ERR_3); 
+		if (is_sky_or_floor(line) || is_texture_line(line))
+			line = trim_line(scene, line, map_fd);
 		if (!(*scene)->input_list)
 		{
 			(*scene)->input_list = ft_lstnew(ft_strdup(line));
@@ -40,16 +42,14 @@ void	read_config_lines(t_scene **scene, t_list *list)
 {
 	char	**split;
 	int		i;
-	int		found_line_map;
 
 	i = 0;
-	found_line_map = 0;
-	while (list)
+	if (!(*scene)->is_valid)
+		return ;
+	while (list && (*scene)->is_valid)
 	{
 		if (is_texture_line((char *)list->content))
 		{
-			if (found_line_map)
-				add_err(scene, PARSE_ERR_1);
 			split = ft_split((char *)list->content, ' ');
 			check_double_ptr(*scene, split);
 			read_texture(scene, split);
@@ -57,8 +57,6 @@ void	read_config_lines(t_scene **scene, t_list *list)
 		}
 		if (is_sky_or_floor((char *)list->content))
 		{
-			if (found_line_map)
-				add_err(scene, PARSE_ERR_1);
 			i++;
 			split = ft_split((char *)list->content, ' ');
 			if (ft_splitlen(split) != 2 || i > 2)
@@ -67,10 +65,9 @@ void	read_config_lines(t_scene **scene, t_list *list)
 			read_colours(scene, split, *((char *)list->content), split);
 			ft_splitfree(split);
 		}
-		if (is_map_line((char *)list->content))
-			found_line_map = 1;
 		list = list->next;
 	}
+	check_colour_range(scene);
 }
 
 void	read_texture(t_scene **scene, char **split)
@@ -127,7 +124,7 @@ void	read_colours(t_scene **scene, char **split, char colour, char **splt)
 {
 	char	**values;
 
-	if (!(*scene)->is_valid)
+	if (ft_splitlen(split) != 2)
 		return ;
 	values = NULL;
 	values = ft_split(split[1], ',');
@@ -138,15 +135,15 @@ void	read_colours(t_scene **scene, char **split, char colour, char **splt)
 		add_err(scene, WEIRD_INPUT_1);
 	else if (colour == 'F')
 	{
-		(*scene)->floor_r = ft_atoi(values[0]) % 255;
-		(*scene)->floor_g = ft_atoi(values[1]) % 255;
-		(*scene)->floor_b = ft_atoi(values[2]) % 255;
+		(*scene)->floor_r = ft_atoi(values[0]);
+		(*scene)->floor_g = ft_atoi(values[1]);
+		(*scene)->floor_b = ft_atoi(values[2]);
 	}
 	else if (colour == 'C')
 	{
-		(*scene)->sky_r = ft_atoi(values[0]) % 255;
-		(*scene)->sky_g = ft_atoi(values[1]) % 255;
-		(*scene)->sky_b = ft_atoi(values[2]) % 255;
+		(*scene)->sky_r = ft_atoi(values[0]);
+		(*scene)->sky_g = ft_atoi(values[1]);
+		(*scene)->sky_b = ft_atoi(values[2]);
 	}
 	ft_splitfree(values);
 }

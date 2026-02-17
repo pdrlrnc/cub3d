@@ -17,6 +17,8 @@ void	read_map(t_scene **scene, t_list *list)
 	int	i;
 
 	i = 0;
+	if (!(*scene)->is_valid)
+		return ;
 	while (is_config_line((char *)list->content)
 		|| !ft_strcmp((char *)list->content, "\n"))
 		list = list->next;
