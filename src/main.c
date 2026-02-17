@@ -1,28 +1,5 @@
 #include "main.h"
 
-// void	draw_map(t_img *img, int color, t_game *game, int render_perso)
-// {
-// 	int x = 0;
-// 	while (game->scene->map[x])
-// 	{
-// 		int y = 0;
-// 		while (game->scene->map[x][y])
-// 		{
-// 			// printf("Map[%d][%d] == %d\n", x, y, game->scene->map[x][y]);
-// 			if (game->scene->map[x][y] == '1')
-// 				draw_wall(img, ZOOM * x, ZOOM * y, ZOOM, color);
-// 			if (game->scene->map[x][y] == 'N' && render_perso)
-// 			{
-// 				game->perso.pos_x = x * ZOOM;
-// 				game->perso.pos_y = y * ZOOM;
-// 				game->perso.angle = 270;
-// 			}
-// 			y++;
-// 		}
-// 		x++;
-// 	}
-// }
-
 void	draw_containers(t_img *img, int color, t_game *game)
 {
 	int	x_mid = WIN_WIDTH / 2;
@@ -69,12 +46,6 @@ void	init_2d_map(t_game *game)
 	int grid_size = SIZE_CONTAINER / nb_grids;
 	game->grid_size = grid_size;
 
-	// printf("SIZE_CONTAINER=%d\n", SIZE_CONTAINER);
-	// printf("game->scene->map_w=%d\n", game->scene->map_w);
-	// printf("game->scene->map_h=%d\n", game->scene->map_h);
-	// printf("grid_size=%d\n", grid_size);
-	// printf("nb_grids=%d\n", nb_grids);
-
 	game->map2d = malloc(sizeof(t_grid *) * nb_grids);
 	int	y = 0;
 	while (y < game->scene->map_h)
@@ -93,7 +64,25 @@ void	init_2d_map(t_game *game)
 			else if (game->scene->map[y][x] == '0')
 				game->map2d[y][x].type = SPACE;
 			else if (game->scene->map[y][x] == 'N')
+			{
 				game->map2d[y][x].type = PERSO;
+				game->perso.angle = 270;
+			}
+			else if (game->scene->map[y][x] == 'E')
+			{
+				game->map2d[y][x].type = PERSO;
+				game->perso.angle = 0;
+			}
+			else if (game->scene->map[y][x] == 'S')
+			{
+				game->map2d[y][x].type = PERSO;
+				game->perso.angle = 90;
+			}
+			else if (game->scene->map[y][x] == 'W')
+			{
+				game->map2d[y][x].type = PERSO;
+				game->perso.angle = 180;
+			}
 			else
 				game->map2d[y][x].type = VOID;
 			x++;
@@ -152,34 +141,19 @@ void	draw_2d_map(t_img *img, int color, t_game *game)
 	}
 }
 
-void print_map2d(t_game *game)
-{
-	int x, y;
-
-	y = 0;
-	while (y < game->scene->map_h)
-	{
-		x = 0;
-		while (x < game->scene->map_w)
-		{
-			printf("game->map2d[%d][%d]=%c\n", y, x, game->map2d[y][x].init);
-			x++;
-		}
-		printf("\n");
-		y++;
-	}
-}
-
 int	hit(int pos_i_x, int pos_i_y, t_game *game)
 {
-	if (
-		pos_i_y > game->cont2d.y1 + game->grid_size &&
-		pos_i_x > game->cont2d.x1 + game->grid_size &&
-		pos_i_y < game->cont2d.y2 - game->grid_size &&
-		pos_i_x < game->cont2d.x2 - game->grid_size
-	)
-		return (0);
-	return (1);
+	if (pos_i_x == game->cont2d.x1)
+		return (1);
+	if (pos_i_x < game->cont2d.x1)
+		return (1);
+	if (pos_i_x > game->cont2d.x2)
+		return (1);
+	if (pos_i_y < game->cont2d.y1)
+		return (1);
+	if (pos_i_y > game->cont2d.y2)
+		return (1);
+	return (0);
 }
 
 void	draw_2d_perso(t_img *img, int color, t_game *game)
@@ -230,7 +204,6 @@ int	main(int argc, char **argv)
 	game->perso.size = 10;
 	game->perso.pos_x = game->cont2d.x1 + game->scene->px * game->grid_size + game->grid_size / 2 - (game->perso.size / 2);
 	game->perso.pos_y = game->cont2d.y1 + game->scene->py * game->grid_size + game->grid_size / 2 - (game->perso.size / 2);
-	game->perso.angle = 270;
 	draw_2d_perso(&game->img, 0x00FF0000 - 20000, game);
 
 	mlx_put_image_to_window(game->mlx, game->mlx_win, game->img.img, 0, 0);

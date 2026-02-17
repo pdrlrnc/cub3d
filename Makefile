@@ -13,9 +13,26 @@
 NAME		= cub3d
 MLX_LIB		= mlx_linux
 SRC_FILES	= \
-	input_validation error_checker1 error_checker2 get_next_line stack reader1\
-	reader2 map_normalizer are_they checkers flood_fill parser_utils _debug\
-	my_mlx control main utils
+	_debug \
+	are_they1 \
+	are_they2 \
+	checkers \
+	control \
+	error_checker1 \
+	error_checker2 \
+	error_checker3 \
+	flood_fill \
+	get_next_line \
+	input_validation \
+	main \
+	map_normalizer \
+	my_mlx \
+	parser_utils \
+	raycast \
+	reader1 \
+	reader2 \
+	stack \
+	utils \
 
 SRC_DIR		= src
 
