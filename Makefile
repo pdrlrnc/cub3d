@@ -109,6 +109,6 @@ download_mlx_linux: fclean
 run:
 	@clear
 	make re
-	@./$(NAME) maps/simple.cub
+	@./$(NAME) maps/egg.cub
 
 .PHONY: all clean fclean re valgrind download_mlx_linux run

@@ -76,6 +76,7 @@ int	game_loop(t_game *game)
 	draw_2d_map(&game->img, 0x00FFFFFF, game);
 	draw_2d_grid(&game->img, 0x00FF0000, game);
 	draw_2d_perso(&game->img, 0x00FF0000 - 10000, game);
+	draw_3d_view(game);
 	mlx_put_image_to_window(game->mlx, game->mlx_win, game->img.img, 0, 0);
 	return (1);
 }

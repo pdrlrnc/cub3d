@@ -143,18 +143,69 @@ void	draw_2d_map(t_img *img, int color, t_game *game)
 
 int	hit(int pos_i_x, int pos_i_y, t_game *game)
 {
-	if (pos_i_x == game->cont2d.x1)
+	int rel_x = pos_i_x - game->cont2d.x1;
+	int rel_y = pos_i_y - game->cont2d.y1;
+	int grid_x = rel_x / game->grid_size;
+	int grid_y = rel_y / game->grid_size;
+
+	// Out of bounds
+	if (grid_x < 0 || grid_x >= game->scene->map_w
+		|| grid_y < 0 || grid_y >= game->scene->map_h)
 		return (1);
-	if (pos_i_x < game->cont2d.x1)
+
+	// Main wall check — this is essential!
+	if (game->map2d[grid_y][grid_x].type == WALL)
 		return (1);
-	if (pos_i_x > game->cont2d.x2)
+
+	// Additional: grid boundary edge cases
+	if (rel_x % game->grid_size == 0 && grid_x > 0
+		&& game->map2d[grid_y][grid_x - 1].type == WALL)
 		return (1);
-	if (pos_i_y < game->cont2d.y1)
+	if (rel_y % game->grid_size == 0 && grid_y > 0
+		&& game->map2d[grid_y - 1][grid_x].type == WALL)
 		return (1);
-	if (pos_i_y > game->cont2d.y2)
-		return (1);
+
 	return (0);
 }
+
+double	normalize_angle(double angle)
+{
+	while (angle < 0)
+		angle += 360;
+	while (angle >= 360)
+		angle -= 360;
+	return (angle);
+}
+
+void	draw_2d_perso_dir(t_img *img, int x, int y, int color, t_game *game, int nb_lines)
+{
+	double init_angle;
+	if (nb_lines == 1)
+		init_angle = game->perso.angle;
+	else
+		init_angle = game->perso.angle - RAD_DIFF;
+	double step = (RAD_DIFF * 2) / nb_lines;
+
+	int j = 0;
+	while (j < nb_lines)
+	{
+		double rad = normalize_angle(init_angle + step * j) * M_PI / 180;
+		int i = 0;
+		double pos_i_x = x + cos(rad) * i;
+		double pos_i_y = y + sin(rad) * i;
+		_put_pixel(img, pos_i_x, pos_i_y, color);
+		while (!hit(pos_i_x, pos_i_y, game))
+		{
+			pos_i_x = x + cos(rad) * i;
+			pos_i_y = y + sin(rad) * i;
+			_put_pixel(img, pos_i_x, pos_i_y, color);
+			i++;
+		}
+		j++;
+	}
+	double rad = game->perso.angle * M_PI / 180;
+}
+
 
 void	draw_2d_perso(t_img *img, int color, t_game *game)
 {
@@ -162,17 +213,74 @@ void	draw_2d_perso(t_img *img, int color, t_game *game)
 	double perso_center_x = game->perso.pos_x + game->perso.size / 2;
 	double perso_center_y = game->perso.pos_y + game->perso.size / 2;
 
-	double rad = game->perso.angle * M_PI / 180;
+	draw_2d_perso_dir(img, perso_center_x, perso_center_y, color, game, 50);
+	draw_2d_perso_dir(img, perso_center_x, perso_center_y, color - 1000, game, 1);
+}
+
+double	cast_ray(t_game *game, double angle, int draw_2d)
+{
+	double rad = normalize_angle(angle) * M_PI / 180;
+	double px = game->perso.pos_x + game->perso.size / 2;
+	double py = game->perso.pos_y + game->perso.size / 2;
+	double cos_a = cos(rad);
+	double sin_a = sin(rad);
 	int i = 0;
-	double pos_i_x = perso_center_x + cos(rad) * i;
-	double pos_i_y = perso_center_y + sin(rad) * i;
-	_put_pixel(img, pos_i_x, pos_i_y, color);
-	while (!hit(pos_i_x, pos_i_y, game))
+	double pos_x, pos_y;
+
+	while (1)
 	{
-		pos_i_x = perso_center_x + cos(rad) * i;
-		pos_i_y = perso_center_y + sin(rad) * i;
-		_put_pixel(img, pos_i_x, pos_i_y, color);
+		pos_x = px + cos_a * i;
+		pos_y = py + sin_a * i;
+		if (draw_2d)
+			_put_pixel(&game->img, pos_x, pos_y, 0x00FFFF00);
+		if (hit(pos_x, pos_y, game))
+			break ;
 		i++;
+	}
+	// Return euclidean distance
+	return (sqrt((pos_x - px) * (pos_x - px) + (pos_y - py) * (pos_y - py)));
+}
+
+void	draw_3d_view(t_game *game)
+{
+	int		nb_rays = game->cont3d.x2 - game->cont3d.x1; // one ray per pixel column
+	double	init_angle = normalize_angle(game->perso.angle - RAD_DIFF);
+	double	angle_step = (RAD_DIFF * 2.0) / nb_rays;
+	int		col;
+
+	col = 1;
+	while (col < nb_rays - 1)
+	{
+		double ray_angle = normalize_angle(init_angle + angle_step * col);
+
+		// 1. Cast ray, get raw distance
+		double raw_dist = cast_ray(game, ray_angle, 1);
+
+		// 2. Fix fisheye
+		double angle_diff = ray_angle - game->perso.angle;
+		double perp_dist = raw_dist * cos(angle_diff * M_PI / 180);
+
+		// 3. Calculate wall height (tweak the constant to taste)
+		double wall_height = (game->grid_size * SIZE_CONTAINER) / perp_dist;
+		if (wall_height > SIZE_CONTAINER)
+			wall_height = SIZE_CONTAINER;
+
+		// 4. Calculate where to draw the wall slice
+		int cont3d_mid_y = (game->cont3d.y1 + game->cont3d.y2) / 2;
+		int draw_start = cont3d_mid_y - (int)(wall_height / 2);
+		if (draw_start < game->cont3d.y1 + 1)
+			draw_start = game->cont3d.y1 + 1;
+		int draw_end = cont3d_mid_y + (int)(wall_height / 2);
+		if (draw_end > game->cont3d.y2 - 1)
+			draw_end = game->cont3d.y2 - 1;
+		int draw_x = game->cont3d.x1 + col;
+
+		// 5. Draw ceiling, wall, floor
+		put_line(game, draw_x, game->cont3d.y1 + 1, draw_x, draw_start, 0x00333333);  // ceiling
+		put_line(game, draw_x, draw_start, draw_x, draw_end, 0x00AAAAAA);          // wall
+		put_line(game, draw_x, draw_end, draw_x, game->cont3d.y2 - 1, 0x00666666);     // floor
+
+		col++;
 	}
 }
 
@@ -205,6 +313,7 @@ int	main(int argc, char **argv)
 	game->perso.pos_x = game->cont2d.x1 + game->scene->px * game->grid_size + game->grid_size / 2 - (game->perso.size / 2);
 	game->perso.pos_y = game->cont2d.y1 + game->scene->py * game->grid_size + game->grid_size / 2 - (game->perso.size / 2);
 	draw_2d_perso(&game->img, 0x00FF0000 - 20000, game);
+	draw_3d_view(game);
 
 	mlx_put_image_to_window(game->mlx, game->mlx_win, game->img.img, 0, 0);
 	listen_events(game);

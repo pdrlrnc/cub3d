@@ -22,12 +22,12 @@
 #define WIN_HEIGHT		800
 #define SIZE_CONTAINER	WIN_WIDTH / 4
 #define	SIZE_PERSO		10
-#define SPEED			16000
+#define SPEED			12000
 #define RAD				20
+#define RAD_DIFF		25
 #ifndef M_PI
-# define M_PI 3.14159265358979323846
+# define M_PI			3.14159265358979323846
 #endif
-#define MAIN_H
 
 
 // ##################################################
@@ -112,7 +112,7 @@ void	_put_pixel(t_img *img, int x, int y, int color);
 void	listen_events(t_game *game);
 
 // UTILS
-int	max(int x1, int x2);
+int		max(int x1, int x2);
 
 void	draw_containers(t_img *img, int color, t_game *game);
 void	draw_2d_perso(t_img *img, int color, t_game *game);
@@ -120,5 +120,6 @@ void	init_2d_map(t_game *game);
 void	draw_2d_map(t_img *img, int color, t_game *game);
 void	draw_2d_grid(t_img *img, int color, t_game *game);
 void	draw_2d_perso(t_img *img, int color, t_game *game);
+void	draw_3d_view(t_game *game);
 
 #endif // MAIN_H
