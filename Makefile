@@ -17,22 +17,26 @@ SRC_FILES	= \
 	are_they1 \
 	are_they2 \
 	checkers \
-	control \
 	error_checker1 \
 	error_checker2 \
 	error_checker3 \
 	flood_fill \
 	get_next_line \
 	input_validation \
-	main \
 	map_normalizer \
-	my_mlx \
 	parser_utils \
-	raycast \
 	reader1 \
 	reader2 \
 	stack \
 	utils \
+	my_mlx \
+	draw2d \
+	draw3d \
+	control_utils \
+	control \
+	raycast_utils \
+	raycast \
+	exit \
 
 SRC_DIR		= src
 
@@ -43,8 +47,8 @@ LIBFT_DIR	= $(SRC_DIR)/libft
 LIBFT_A		= $(LIBFT_DIR)/libft.a
 
 CC			= cc
-CFLAGS		= -g -O0 -I$(INC_DIR) -Iminilibx-linux -O3
-# CFLAGS		= -g -O0 -Wall -Wextra -Werror -I$(INC_DIR) -Iminilibx-linux -O3
+# CFLAGS		= -g -O0 -I$(INC_DIR) -Iminilibx-linux -O3
+CFLAGS		= -g -O0 -Wall -Wextra -Werror -I$(INC_DIR) -Iminilibx-linux -O3
 RM			= rm -rf
 MOVE		= mv
 MAKE		= make --no-print-directory
@@ -68,7 +72,7 @@ all: $(NAME)
 		$(RED)| (__| |_| | |_) |.___/ / (_| |$(DEF_COLOUR)\n\
 		$(RED) \___|\__,_|_.__/ \____/ \__,_|$(DEF_COLOUR)\n"
 
-$(NAME): download_mlx_linux $(OBJ) $(LIBFT_A)
+$(NAME): $(OBJ) $(LIBFT_A)
 	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT_A) $(INCLUDE) -o $(NAME)
 
 
@@ -90,8 +94,8 @@ clean:
 fclean: clean
 	@$(MAKE) -C $(LIBFT_DIR) --no-print-directory fclean
 	@$(RM) $(NAME)
-	@$(RM) $(MLX_LIB)
-	@$(RM) *.cub
+# 	@$(RM) $(MLX_LIB)
+# 	@$(RM) *.cub
 
 re: fclean all
 
@@ -109,6 +113,6 @@ download_mlx_linux: fclean
 run:
 	@clear
 	make re
-	@./$(NAME) maps/egg.cub
+	./$(NAME) maps/simple.cub
 
 .PHONY: all clean fclean re valgrind download_mlx_linux run

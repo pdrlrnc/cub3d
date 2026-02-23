@@ -1,11 +1,35 @@
-#include "main.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   my_mlx.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vibarre <vibarre@student.42lisboa.com>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/02/23 16:41:14 by vibarre           #+#    #+#             */
+/*   Updated: 2026/02/23 16:41:15 by vibarre          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "cub3d.h"
+
+void	fill_square(t_game *game, int x, int y, int size, int color)
+{
+	int	i;
+
+	i = 0;
+	while (i < size)
+	{
+		put_line(game, x + i, y, x + i, y + size, color);
+		i++;
+	}
+}
 
 void	_put_pixel(t_img *img, int x, int y, int color)
 {
 	char	*dst;
 
 	dst = img->addr + (x * (img->bitspp / 8) + y * img->lsize);
-	*(unsigned int*)dst = color;
+	*(unsigned int *)dst = color;
 }
 
 static void	drawh(t_game *game, int x1, int y1, int x2, int y2, int color)
