@@ -12,14 +12,23 @@
 
 #include "cub3d.h"
 
-void	fill_square(t_game *game, int x, int y, int size, int color)
+void	fill_square(t_game *game, t_line *l, int size)
 {
 	int	i;
+	int	x;
+	int	y;
 
 	i = 0;
+	x = l->x1;
+	y = l->y1;
 	while (i < size)
 	{
-		put_line(game, x + i, y, x + i, y + size, color);
+		put_line(game, LINE(
+				x + i,
+				y,
+				x + i,
+				y + size,
+				l->color));
 		i++;
 	}
 }
@@ -32,74 +41,77 @@ void	_put_pixel(t_img *img, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-static void	drawh(t_game *game, int x1, int y1, int x2, int y2, int color)
+static void	drawh(t_game *game, t_line *l)
 {
-	int		dx;
-	int		dy;
-	int		p;
-	int		dir;
+	int	dx;
+	int	dy;
+	int	p;
+	int	dir;
 
-	dx = x2 - x1;
-	dy = y2 - y1;
+	dx = l->x2 - l->x1;
+	dy = l->y2 - l->y1;
 	dir = 1;
 	if (dy < 0)
 		dir = -dir;
 	dy *= dir;
 	p = 2 * dy - dx;
-	while (x1 <= x2)
+	while (l->x1 <= l->x2)
 	{
-		_put_pixel(&game->img, x1, y1, color);
+		_put_pixel(&game->img, l->x1, l->y1, l->color);
 		if (p >= 0)
 		{
-			y1 = y1 + dir;
-			p = p - 2 * dx;
+			l->y1 += dir;
+			p -= 2 * dx;
 		}
-		p = p + 2 * dy;
-		x1 = x1 + 1;
+		p += 2 * dy;
+		l->x1++;
 	}
 }
 
-static void	drawv(t_game *game, int x1, int y1, int x2, int y2, int color)
+static void	drawv(t_game *game, t_line *l)
 {
-	int		dx;
-	int		dy;
-	int		p;
-	int		dir;
+	int	dx;
+	int	dy;
+	int	p;
+	int	dir;
 
-	dx = x2 - x1;
-	dy = y2 - y1;
+	dx = l->x2 - l->x1;
+	dy = l->y2 - l->y1;
 	dir = 1;
 	if (dx < 0)
 		dir = -dir;
 	dx *= dir;
 	p = 2 * dx - dy;
-	while (y1 <= y2)
+	while (l->y1 <= l->y2)
 	{
-		_put_pixel(&game->img, x1, y1, color);
+		_put_pixel(&game->img, l->x1, l->y1, l->color);
 		if (p >= 0)
 		{
-			x1 = x1 + dir;
-			p = p - 2 * dy;
+			l->x1 += dir;
+			p -= 2 * dy;
 		}
-		p = p + 2 * dx;
-		y1 = y1 + 1;
+		p += 2 * dx;
+		l->y1++;
 	}
 }
 
-void	put_line(t_game *game, int x1, int y1, int x2, int y2, int color)
+void	put_line(t_game *game, t_line *l)
 {
-	if (abs(x2 - x1) > abs(y2 - y1))
+	t_line	tmp;
+
+	tmp = *l;
+	if (abs(tmp.x2 - tmp.x1) > abs(tmp.y2 - tmp.y1))
 	{
-		if (x1 > x2)
-			drawh(game, x1, y1, x2, y2, color);
+		if (tmp.x1 > tmp.x2)
+			drawh(game, LINE(tmp.x2, tmp.y2, tmp.x1, tmp.y1, tmp.color));
 		else
-			drawh(game, x1, y1, x2, y2, color);
+			drawh(game, &tmp);
 	}
 	else
 	{
-		if (y1 > y2)
-			drawv(game, x1, y1, x2, y2, color);
+		if (tmp.y1 > tmp.y2)
+			drawv(game, LINE(tmp.x2, tmp.y2, tmp.x1, tmp.y1, tmp.color));
 		else
-			drawv(game, x1, y1, x2, y2, color);
+			drawv(game, &tmp);
 	}
 }

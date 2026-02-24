@@ -34,113 +34,82 @@ int	hit(t_game *game, int pos_i_x, int pos_i_y)
 	return (0);
 }
 
-double	cast_ray(t_game *game, double angle, int draw_2d)
+static void	init_ray_dir(t_ray *r, t_game *game)
 {
-	double	rad;
-	double	px;
-	double	py;
-	double	cos_a;
-	double	sin_a;
-	int		i;
-	double	pos_x;
-	double	pos_y;
-
-	rad = normalize_angle(angle) * M_PI / 180;
-	px = game->perso.pos_x + game->perso.size / 2;
-	py = game->perso.pos_y + game->perso.size / 2;
-	cos_a = cos(rad);
-	sin_a = sin(rad);
-	i = 0;
-	while (1)
-	{
-		pos_x = px + cos_a * i;
-		pos_y = py + sin_a * i;
-		if (draw_2d)
-			_put_pixel(&game->img, pos_x, pos_y, 0x00FFFF00);
-		if (hit(game, pos_x, pos_y))
-			break ;
-		i++;
-	}
-	return (sqrt((pos_x - px) * (pos_x - px) + (pos_y - py) * (pos_y - py)));
-}
-
-double	cast_ray_dda(t_game *game, double angle, double *dist)
-{
-	double	rad;
-	double	px;
-	double	py;
-	double	dir_x;
-	double	dir_y;
-	int		map_x;
-	int		map_y;
-	double	delta_x;
-	double	delta_y;
-	double	side_x;
-	double	side_y;
-	int		step_x;
-	double	step_y;
 	double	rel_x;
 	double	rel_y;
-	int		side;
+
+	rel_x = r->px - game->cont2d.x1;
+	rel_y = r->py - game->cont2d.y1;
+	r->step_x = 1;
+	r->side_x = ((r->map_x + 1) * game->grid_size - rel_x)
+		/ game->grid_size * r->delta_x;
+	if (r->dir_x < 0)
+	{
+		r->step_x = -1;
+		r->side_x = (rel_x - r->map_x * game->grid_size)
+			/ game->grid_size * r->delta_x;
+	}
+	r->step_y = 1;
+	r->side_y = ((r->map_y + 1) * game->grid_size - rel_y)
+		/ game->grid_size * r->delta_y;
+	if (r->dir_y < 0)
+	{
+		r->step_y = -1;
+		r->side_y = (rel_y - r->map_y * game->grid_size)
+			/ game->grid_size * r->delta_y;
+	}
+}
+
+static void	init_ray(t_ray *r, t_game *game, double angle)
+{
+	double	rad;
 
 	rad = angle * M_PI / 180;
-	px = game->perso.pos_x + game->perso.size / 2.0;
-	py = game->perso.pos_y + game->perso.size / 2.0;
-	dir_x = cos(rad);
-	dir_y = sin(rad);
-	map_x = ((px - game->cont2d.x1) / game->grid_size);
-	map_y = ((py - game->cont2d.y1) / game->grid_size);
-	delta_x = fabs(game->grid_size / dir_x);
-	delta_y = fabs(game->grid_size / dir_y);
-	rel_x = px - game->cont2d.x1;
-	rel_y = py - game->cont2d.y1;
-	if (dir_x < 0)
+	r->px = game->perso.pos_x + game->perso.size / 2.0;
+	r->py = game->perso.pos_y + game->perso.size / 2.0;
+	r->dir_x = cos(rad);
+	r->dir_y = sin(rad);
+	r->map_x = (int)((r->px - game->cont2d.x1) / game->grid_size);
+	r->map_y = (int)((r->py - game->cont2d.y1) / game->grid_size);
+	r->delta_x = fabs(game->grid_size / r->dir_x);
+	r->delta_y = fabs(game->grid_size / r->dir_y);
+	init_ray_dir(r, game);
+}
+
+static void	step_ray(t_ray *r)
+{
+	if (r->side_x < r->side_y)
 	{
-		step_x = -1;
-		side_x = (rel_x - map_x * game->grid_size)
-			/ game->grid_size * delta_x;
+		r->side_x += r->delta_x;
+		r->map_x += r->step_x;
+		r->side = 0;
 	}
 	else
 	{
-		step_x = 1;
-		side_x = ((map_x + 1) * game->grid_size - rel_x)
-			/ game->grid_size * delta_x;
+		r->side_y += r->delta_y;
+		r->map_y += r->step_y;
+		r->side = 1;
 	}
-	if (dir_y < 0)
-	{
-		step_y = -1;
-		side_y = (rel_y - map_y * game->grid_size)
-			/ game->grid_size * delta_y;
-	}
-	else
-	{
-		step_y = 1;
-		side_y = ((map_y + 1) * game->grid_size - rel_y)
-			/ game->grid_size * delta_y;
-	}
+}
+
+int	cast_ray_dda(t_game *game, double angle, double *dist)
+{
+	t_ray	r;
+
+	init_ray(&r, game, angle);
 	while (1)
 	{
-		if (side_x < side_y)
-		{
-			side_x += delta_x;
-			map_x += step_x;
-			side = 0;
-		}
-		else
-		{
-			side_y += delta_y;
-			map_y += step_y;
-			side = 1;
-		}
-		if (map_x < 0 || map_x >= game->scene->map_w
-			|| map_y < 0 || map_y >= game->scene->map_h)
+		step_ray(&r);
+		if (r.map_x < 0 || r.map_x >= game->scene->map_w
+			|| r.map_y < 0 || r.map_y >= game->scene->map_h)
 			break ;
-		if (game->map2d[map_y][map_x].type == WALL)
+		if (game->map2d[r.map_y][r.map_x].type == WALL)
 			break ;
 	}
-	if (side == 0)
-		*dist = side_x - delta_x;
+	if (r.side == 0)
+		*dist = r.side_x - r.delta_x;
 	else
-		*dist = side_y - delta_y;
-	return (side);
+		*dist = r.side_y - r.delta_y;
+	return (r.side);
 }

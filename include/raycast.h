@@ -38,7 +38,13 @@
 #define ANGLE_SPEED		5
 #define RAD				20
 #define RAD_DIFF		30
-
+#define COLOR_CEILING	0x00333333
+#define COLOR_FLOOR		0x00666666
+#define COLOR_WALL_N	0x00AAAAAA
+#define COLOR_WALL_W	0x00888888
+#define COLOR_WALL_S	0x00AAAAAA
+#define COLOR_WALL_E	0x00888888
+#define LINE(a, b, c, d, e) &(t_line){a, b, c, d, e}
 #ifndef M_PI
 # define M_PI			3.14159265358979323846
 #endif
@@ -82,6 +88,40 @@ typedef enum e_type {
 // # STRUCTS
 // ##################################################
 
+typedef struct s_line
+{
+	int	x1;
+	int	y1;
+	int	x2;
+	int	y2;
+	int	color;
+}	t_line;
+
+typedef struct s_ray
+{
+	double	px;
+	double	py;
+	double	dir_x;
+	double	dir_y;
+	double	delta_x;
+	double	delta_y;
+	double	side_x;
+	double	side_y;
+	int		step_x;
+	int		step_y;
+	int		map_x;
+	int		map_y;
+	int		side;
+}	t_ray;
+
+typedef struct s_slice
+{
+	double	height;
+	int		mid_y;
+	int		start;
+	int		end;
+}	t_slice;
+
 typedef struct s_img {
 	void	*img;
 	char	*addr;
@@ -111,6 +151,7 @@ typedef struct s_cont {
 	int	y1;
 	int	x2;
 	int	y2;
+	int	mid_y;
 }	t_cont;
 
 typedef struct s_grid {
@@ -135,6 +176,7 @@ typedef struct s_game {
 	t_cont	cont2d;
 	t_grid	**map2d;
 	t_cont	cont3d;
+	int		nb_rays;
 }	t_game;
 
 
@@ -142,13 +184,13 @@ typedef struct s_game {
 // # FUNCS
 // ##################################################
 
-void	put_line(t_game *game, int x1, int y1, int x2, int y2, int color);
+void	put_line(t_game *game, t_line *l);
 void	_put_pixel(t_img *img, int x, int y, int color);
 void	listen_events(t_game *game);
 
-void	fill_square(t_game *game, int x, int y, int size, int color);
+void	fill_square(t_game *game, t_line *l, int size);
 
-void	draw_3d_view(t_game *game);
+void	draw_3d_view(t_game *game, double init_angle);
 
 void	draw_2d_grid(t_game *game, int color);
 void	draw_2d_map(t_game *game, int color);
@@ -156,8 +198,12 @@ void	draw_2d_perso(t_game *game, int color);
 void	draw_2d_perso_dir(t_game *game, int x, int y, int color);
 
 int		hit(t_game *game, int pos_i_x, int pos_i_y);
-double	cast_ray(t_game *game, double angle, int draw_2d);
-double	cast_ray_dda(t_game *game, double angle, double *dist);
+int		cast_ray_dda(t_game *game, double angle, double *dist);
+
+int		init_game(t_game *game);
+void	set_2d_point(t_game *game, int x, int y);
+int		init_2d_map(t_game *game);
+int		init_perso(t_game *game);
 
 // UTILS
 int		max(int x1, int x2);

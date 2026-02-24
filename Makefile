@@ -30,6 +30,7 @@ SRC_FILES	= \
 	stack \
 	utils \
 	my_mlx \
+	init \
 	draw2d \
 	draw3d \
 	control_utils \
@@ -112,7 +113,12 @@ download_mlx_linux: fclean
 
 run:
 	@clear
-	make re
-	./$(NAME) maps/simple.cub
+	@make re
+	@./$(NAME) maps/subject.cub
 
-.PHONY: all clean fclean re valgrind download_mlx_linux run
+runvalgrind:
+	@clear
+	@make re
+	@valgrind --leak-check=full --track-origins=yes ./$(NAME) maps/subject.cub
+
+.PHONY: all clean fclean re valgrind download_mlx_linux run runvalgrind
