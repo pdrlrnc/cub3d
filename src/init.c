@@ -35,6 +35,8 @@ int	init_game(t_game *game)
 	game->cont3d.y2 = HEIGHT;
 	game->cont3d.mid_y = (game->cont3d.y1 + game->cont3d.y2) / 2;
 	game->nb_rays = game->cont3d.x2 - game->cont3d.x1;
+	game->minimap_active = 1;
+	game->fisheye = 0 ;
 	return (1);
 }
 
@@ -53,13 +55,13 @@ void	set_2d_point(t_game *game, int x, int y)
 	{
 		game->map2d[y][x].type = PERSO;
 		if (game->scene->map[y][x] == 'N')
-			game->perso.angle = 270;
+			game->player.angle = 270;
 		else if (game->scene->map[y][x] == 'E')
-			game->perso.angle = 0;
+			game->player.angle = 0;
 		else if (game->scene->map[y][x] == 'S')
-			game->perso.angle = 90;
+			game->player.angle = 90;
 		else if (game->scene->map[y][x] == 'W')
-			game->perso.angle = 180;
+			game->player.angle = 180;
 	}
 	else
 		game->map2d[y][x].type = VOID;
@@ -87,12 +89,12 @@ int	init_2d_map(t_game *game)
 	return (1);
 }
 
-int	init_perso(t_game *game)
+int	init_player(t_game *game)
 {
-	game->perso.size = SIZE_PERSO;
-	game->perso.pos_x = game->cont2d.x1 + game->scene->px
-		* game->grid_size + game->grid_size / 2 - (game->perso.size / 2);
-	game->perso.pos_y = game->cont2d.y1 + game->scene->py
-		* game->grid_size + game->grid_size / 2 - (game->perso.size / 2);
+	game->player.size = SIZE_PERSO;
+	game->player.pos_x = game->cont2d.x1 + game->scene->px
+		* game->grid_size + game->grid_size / 2 - (game->player.size / 2);
+	game->player.pos_y = game->cont2d.y1 + game->scene->py
+		* game->grid_size + game->grid_size / 2 - (game->player.size / 2);
 	return (1);
 }

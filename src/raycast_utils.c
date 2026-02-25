@@ -66,12 +66,12 @@ static void	init_ray(t_ray *r, t_game *game, double angle)
 	double	rad;
 
 	rad = angle * M_PI / 180;
-	r->px = game->perso.pos_x + game->perso.size / 2.0;
-	r->py = game->perso.pos_y + game->perso.size / 2.0;
+	r->px = game->player.pos_x + game->player.size / 2.0;
+	r->py = game->player.pos_y + game->player.size / 2.0;
 	r->dir_x = cos(rad);
 	r->dir_y = sin(rad);
-	r->map_x = (int)((r->px - game->cont2d.x1) / game->grid_size);
-	r->map_y = (int)((r->py - game->cont2d.y1) / game->grid_size);
+	r->map_x = ((r->px - game->cont2d.x1) / game->grid_size);
+	r->map_y = ((r->py - game->cont2d.y1) / game->grid_size);
 	r->delta_x = fabs(game->grid_size / r->dir_x);
 	r->delta_y = fabs(game->grid_size / r->dir_y);
 	init_ray_dir(r, game);
@@ -111,5 +111,19 @@ int	cast_ray_dda(t_game *game, double angle, double *dist)
 		*dist = r.side_x - r.delta_x;
 	else
 		*dist = r.side_y - r.delta_y;
+
+	if (r.side == 0)
+	{
+		*dist = r.side_x - r.delta_x;
+		game->wall_x = r.py + (*dist) * r.dir_y;
+	}
+	else
+	{
+		*dist = r.side_y - r.delta_y;
+		game->wall_x = r.px + (*dist) * r.dir_x;
+	}
+	game->wall_x = game->wall_x / game->grid_size;
+	game->wall_x -= floor(game->wall_x);
+	game->last_ray = r;
 	return (r.side);
 }

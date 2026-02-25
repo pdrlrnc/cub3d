@@ -14,6 +14,7 @@
 
 static int	key_press(int keycode, t_game *game)
 {
+	printf("keycode=%d\n", keycode);
 	if (keycode == ON_ESC)
 		__exit(game, SUCCESS);
 	if (keycode == ON_LEFT)
@@ -37,6 +38,20 @@ static int	key_release(int keycode, t_game *game)
 		game->keys.right = 0;
 	if (keycode == ON_DOWN)
 		game->keys.down = 0;
+	if (keycode == ON_M)
+	{
+		if (game->minimap_active == 1)
+			game->minimap_active = 0;
+		else
+			game->minimap_active = 1;
+	}
+	if (keycode == ON_F)
+	{
+		if (game->fisheye == 1)
+			game->fisheye = 0;
+		else
+			game->fisheye = 1;
+	}
 	return (0);
 }
 
@@ -45,37 +60,38 @@ static double	define_angle(t_game *game)
 	double	rad;
 
 	if (game->keys.left)
-		game->perso.angle -= ANGLE_SPEED;
+		game->player.angle -= ANGLE_SPEED;
 	if (game->keys.right)
-		game->perso.angle += ANGLE_SPEED;
-	game->perso.angle = normalize_angle(game->perso.angle);
-	rad = game->perso.angle * M_PI / 180;
+		game->player.angle += ANGLE_SPEED;
+	game->player.angle = normalize_angle(game->player.angle);
+	rad = game->player.angle * M_PI / 180;
 	return (rad);
 }
 
 int	game_loop(t_game *game)
 {
 	double	rad;
+	double	speed;
 	double	move_x;
 	double	move_y;
 
-	usleep(MOVE_SPEED);
+	speed = game->grid_size * 0.02;
 	rad = define_angle(game);
-	move_x = cos(rad);
-	move_y = sin(rad);
+	move_x = cos(rad) * speed;
+	move_y = sin(rad) * speed;
 	if (game->keys.up)
 	{
-		if (can_move(game, game->perso.pos_x + move_x, game->perso.pos_y))
-			game->perso.pos_x += move_x;
-		if (can_move(game, game->perso.pos_x, game->perso.pos_y + move_y))
-			game->perso.pos_y += move_y;
+		if (can_move(game, game->player.pos_x + move_x, game->player.pos_y))
+			game->player.pos_x += move_x;
+		if (can_move(game, game->player.pos_x, game->player.pos_y + move_y))
+			game->player.pos_y += move_y;
 	}
 	if (game->keys.down)
 	{
-		if (can_move(game, game->perso.pos_x - move_x, game->perso.pos_y))
-			game->perso.pos_x -= move_x;
-		if (can_move(game, game->perso.pos_x, game->perso.pos_y - move_y))
-			game->perso.pos_y -= move_y;
+		if (can_move(game, game->player.pos_x - move_x, game->player.pos_y))
+			game->player.pos_x -= move_x;
+		if (can_move(game, game->player.pos_x, game->player.pos_y - move_y))
+			game->player.pos_y -= move_y;
 	}
 	render(game);
 	return (1);

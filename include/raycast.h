@@ -34,8 +34,7 @@
 #define SIZE_MAP		(WIDTH / 8)
 #define PADDING_MAP		10
 #define	SIZE_PERSO		5
-#define MOVE_SPEED		20000
-#define ANGLE_SPEED		5
+#define ANGLE_SPEED		0.5
 #define RAD				20
 #define RAD_DIFF		30
 #define COLOR_CEILING	0x00333333
@@ -63,9 +62,11 @@ typedef enum e_keys {
 	ON_DESTROY		= 17,
 	ON_KEYPRESS		= 2,
 	ON_KEYRELEASE	= 3,
+	ON_M			= 109,
+	ON_F			= 102,
 }	e_keys;
 
-typedef enum e_err {
+typedef enum e_excode {
 	SUCCESS		= 0,
 	ALLOCATION	= 1,
 	PARSING		= 2,
@@ -73,7 +74,7 @@ typedef enum e_err {
 	INIT_MAP2D	= 4,
 	INIT_PERSO	= 5,
 	RENDERING	= 6,
-}	e_err;
+}	e_excode;
 
 typedef enum e_type {
 	PERSO,
@@ -87,6 +88,17 @@ typedef enum e_type {
 // ##################################################
 // # STRUCTS
 // ##################################################
+
+typedef struct s_tex
+{
+	void	*img;
+	char	*addr;
+	int		width;
+	int		height;
+	int		bpp;
+	int		lsize;
+	int		endian;
+}	t_tex;
 
 typedef struct s_line
 {
@@ -130,12 +142,12 @@ typedef struct s_img {
 	int		endian;
 }	t_img;
 
-typedef struct s_perso {
+typedef struct s_player {
 	int		size;
 	double	pos_x;
 	double	pos_y;
-	int		angle; // between 0 and 360
-}	t_perso;
+	double	angle; // between 0 and 360
+}	t_player;
 
 typedef struct s_keys {
 	int	a;
@@ -164,19 +176,27 @@ typedef struct s_grid {
 }	t_grid;
 
 typedef struct s_game {
-	void	*mlx;
-	void	*mlx_win;
-	char	**map;
-	int		nb_grids;
-	int		grid_size;
-	t_img	img;
-	t_perso	perso;
-	t_keys	keys;
-	t_scene	*scene;
-	t_cont	cont2d;
-	t_grid	**map2d;
-	t_cont	cont3d;
-	int		nb_rays;
+	void		*mlx;
+	void		*mlx_win;
+	char		**map;
+	int			nb_grids;
+	int			grid_size;
+	t_img		img;
+	t_player	player;
+	t_keys		keys;
+	t_scene		*scene;
+	t_cont		cont2d;
+	t_grid		**map2d;
+	t_cont		cont3d;
+	int			nb_rays;
+	int			minimap_active;
+	int			fisheye;
+	t_tex		tex_n;
+	t_tex		tex_s;
+	t_tex		tex_e;
+	t_tex		tex_w;
+	double		wall_x;
+	t_ray		last_ray;
 }	t_game;
 
 
@@ -203,12 +223,11 @@ int		cast_ray_dda(t_game *game, double angle, double *dist);
 int		init_game(t_game *game);
 void	set_2d_point(t_game *game, int x, int y);
 int		init_2d_map(t_game *game);
-int		init_perso(t_game *game);
+int		init_player(t_game *game);
 
 // UTILS
 int		max(int x1, int x2);
 int		in(char c, char *set);
-int		__exit(t_game *game, e_err code);
 double	normalize_angle(double angle);
 
 int		render(t_game *game);
@@ -217,6 +236,11 @@ int		is_wall_at(t_game *game, double x, double y);
 int		can_move(t_game *game, double new_x, double new_y);
 
 int		_clean(t_game *game);
-int		__exit(t_game *game, e_err code);
+int		__exit(t_game *game, e_excode code);
+
+t_tex	*get_wall_tex(t_game *game, t_ray *r);
+int		load_texture(t_game *game, t_tex *tex, char *path);
+int		load_all_textures(t_game *game);
+void	draw_tex_col(t_game *game, int x, t_slice *s, t_tex *tex);
 
 #endif // MAIN_H

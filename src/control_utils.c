@@ -27,20 +27,18 @@ int	is_wall_at(t_game *game, double x, double y)
 
 int	can_move(t_game *game, double new_x, double new_y)
 {
-	double	margin;
 	double	cx;
 	double	cy;
 
-	margin = 2;
-	cx = new_x + game->perso.size / 2.0;
-	cy = new_y + game->perso.size / 2.0;
-	if (is_wall_at(game, cx - margin, cy - margin))
+	cx = new_x + game->player.size / 2.0;
+	cy = new_y + game->player.size / 2.0;
+	if (is_wall_at(game, cx, cy))
 		return (0);
-	if (is_wall_at(game, cx + margin, cy - margin))
+	if (is_wall_at(game, cx, cy))
 		return (0);
-	if (is_wall_at(game, cx - margin, cy + margin))
+	if (is_wall_at(game, cx, cy))
 		return (0);
-	if (is_wall_at(game, cx + margin, cy + margin))
+	if (is_wall_at(game, cx, cy))
 		return (0);
 	return (1);
 }

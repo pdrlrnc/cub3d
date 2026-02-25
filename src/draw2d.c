@@ -67,7 +67,7 @@ void	draw_2d_perso_dir(t_game *game, int x, int y, int color)
 	double	rad;
 	int		i;
 
-	init_angle = game->perso.angle - RAD_DIFF;
+	init_angle = game->player.angle - RAD_DIFF;
 	step = (RAD_DIFF * 2) / 50;
 	j = 0;
 	while (j < 50)
@@ -87,9 +87,9 @@ void	draw_2d_perso_dir(t_game *game, int x, int y, int color)
 void	draw_2d_perso(t_game *game, int color)
 {
 	fill_square(game, LINE(
-			game->perso.pos_x,
-			game->perso.pos_y,
+			game->player.pos_x,
+			game->player.pos_y,
 			0,
 			0,
-			color), game->perso.size);
+			color), game->player.size);
 }

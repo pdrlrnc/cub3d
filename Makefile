@@ -33,6 +33,7 @@ SRC_FILES	= \
 	init \
 	draw2d \
 	draw3d \
+	textures \
 	control_utils \
 	control \
 	raycast_utils \
@@ -114,11 +115,11 @@ download_mlx_linux: fclean
 run:
 	@clear
 	@make re
-	@./$(NAME) maps/subject.cub
+	@./$(NAME) maps/simple.cub
 
 runvalgrind:
 	@clear
 	@make re
-	@valgrind --leak-check=full --track-origins=yes ./$(NAME) maps/subject.cub
+	@valgrind --leak-check=full --track-origins=yes ./$(NAME) maps/simple.cub
 
 .PHONY: all clean fclean re valgrind download_mlx_linux run runvalgrind
