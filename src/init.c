@@ -36,7 +36,7 @@ int	init_game(t_game *game)
 	game->cont3d.mid_y = (game->cont3d.y1 + game->cont3d.y2) / 2;
 	game->nb_rays = game->cont3d.x2 - game->cont3d.x1;
 	game->minimap_active = 1;
-	game->fisheye = 0 ;
+	game->fisheye = 0;
 	return (1);
 }
 
@@ -76,6 +76,8 @@ int	init_2d_map(t_game *game)
 	while (SIZE_MAP % game->nb_grids != 0)
 		game->nb_grids++;
 	game->grid_size = SIZE_MAP / game->nb_grids;
+	if (game->grid_size < 2)
+		return (0);
 	game->map2d = malloc(sizeof(t_grid *) * game->nb_grids);
 	y = 0;
 	while (y < game->scene->map_h)
@@ -91,7 +93,7 @@ int	init_2d_map(t_game *game)
 
 int	init_player(t_game *game)
 {
-	game->player.size = SIZE_PERSO;
+	game->player.size = SIZE_PLAYER;
 	game->player.pos_x = game->cont2d.x1 + game->scene->px
 		* game->grid_size + game->grid_size / 2 - (game->player.size / 2);
 	game->player.pos_y = game->cont2d.y1 + game->scene->py

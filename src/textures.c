@@ -67,19 +67,19 @@ void	draw_tex_col(t_game *game, int x, t_slice *s, t_tex *tex)
 	double	step;
 	double	tex_pos;
 
-	tex_x = (int)(game->wall_x * tex->width);
+	tex_x = (game->wall_x * tex->width);
 	if (tex_x >= tex->width)
 		tex_x = tex->width - 1;
 	step = (double)tex->height / s->height;
 	tex_pos = 0;
 	if (s->start < (game->cont3d.y1 + game->cont3d.y2) / 2
-		- (int)(s->height / 2))
+		- (s->height / 2))
 		tex_pos = (s->start - ((game->cont3d.y1 + game->cont3d.y2)
 					/ 2 - s->height / 2.0)) * step;
 	y = s->start;
 	while (y < s->end)
 	{
-		tex_y = (int)tex_pos;
+		tex_y = tex_pos;
 		if (tex_y >= tex->height)
 			tex_y = tex->height - 1;
 		_put_pixel(&game->img, x, y, get_tex_pixel(tex, tex_x, tex_y));

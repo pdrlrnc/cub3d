@@ -107,23 +107,17 @@ int	cast_ray_dda(t_game *game, double angle, double *dist)
 		if (game->map2d[r.map_y][r.map_x].type == WALL)
 			break ;
 	}
-	if (r.side == 0)
-		*dist = r.side_x - r.delta_x;
-	else
-		*dist = r.side_y - r.delta_y;
-
+	*dist = r.side_y - r.delta_y;
+	game->wall_x = r.px + (*dist) * r.dir_x;
 	if (r.side == 0)
 	{
 		*dist = r.side_x - r.delta_x;
 		game->wall_x = r.py + (*dist) * r.dir_y;
 	}
-	else
-	{
-		*dist = r.side_y - r.delta_y;
-		game->wall_x = r.px + (*dist) * r.dir_x;
-	}
-	game->wall_x = game->wall_x / game->grid_size;
-	game->wall_x -= floor(game->wall_x);
+	game->wall_x = fmod(game->wall_x, game->grid_size);
+	if (game->wall_x < 0)
+		game->wall_x += game->grid_size;
+	game->wall_x /= game->grid_size;
 	game->last_ray = r;
 	return (r.side);
 }

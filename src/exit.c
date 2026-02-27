@@ -31,7 +31,7 @@ int	_clean(t_game *game)
 	if (game->tex_e.img)
 		mlx_destroy_image(game->mlx, game->tex_e.img);
 	if (game->tex_w.img)
-	mlx_destroy_image(game->mlx, game->tex_w.img);
+		mlx_destroy_image(game->mlx, game->tex_w.img);
 	mlx_destroy_image(game->mlx, game->img.img);
 	mlx_destroy_window(game->mlx, game->mlx_win);
 	mlx_destroy_display(game->mlx);

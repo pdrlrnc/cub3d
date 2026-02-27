@@ -45,7 +45,9 @@ int	main(int argc, char **argv)
 	if (!init_player(game))
 		return (__exit(game, INIT_PERSO));
 	if (!load_all_textures(game))
-		return (__exit(game, INIT_GAME));
+		return (__exit(game, TEXTURES));
+	if (!load_colors(game))
+		return (__exit(game, COLORS));
 	if (!render(game))
 		return (__exit(game, RENDERING));
 	listen_events(game);

@@ -34,6 +34,7 @@ SRC_FILES	= \
 	draw2d \
 	draw3d \
 	textures \
+	colors \
 	control_utils \
 	control \
 	raycast_utils \

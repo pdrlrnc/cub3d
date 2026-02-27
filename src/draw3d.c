@@ -35,10 +35,10 @@ static void	draw_wall_col(t_game *game, int x, t_slice *s)
 {
 	t_tex	*tex;
 
-	put_line(game, LINE(x, game->cont3d.y1, x, s->start, COLOR_CEILING));
+	put_line(game, LINE(x, game->cont3d.y1, x, s->start, game->ceiling));
 	tex = get_wall_tex(game, &game->last_ray);
 	draw_tex_col(game, x, s, tex);
-	put_line(game, LINE(x, s->end, x, game->cont3d.y2, COLOR_FLOOR));
+	put_line(game, LINE(x, s->end, x, game->cont3d.y2, game->floor));
 }
 
 void	draw_3d_view(t_game *game, double init_angle)
@@ -53,9 +53,9 @@ void	draw_3d_view(t_game *game, double init_angle)
 	while (col < game->nb_rays - 1)
 	{
 		cast_ray_dda(
-				game,
-				normalize_angle(init_angle + angle_step * col),
-				&perp_dist);
+			game,
+			normalize_angle(init_angle + angle_step * col),
+			&perp_dist);
 		if (game->fisheye == 0)
 			perp_dist *= cos((RAD_DIFF - angle_step * col) * M_PI / 180);
 		calc_wall_slice(game, perp_dist, &s);

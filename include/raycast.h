@@ -33,16 +33,10 @@
 #define HEIGHT			800
 #define SIZE_MAP		(WIDTH / 8)
 #define PADDING_MAP		10
-#define	SIZE_PERSO		5
+#define	SIZE_PLAYER		5
 #define ANGLE_SPEED		0.5
 #define RAD				20
 #define RAD_DIFF		30
-#define COLOR_CEILING	0x00333333
-#define COLOR_FLOOR		0x00666666
-#define COLOR_WALL_N	0x00AAAAAA
-#define COLOR_WALL_W	0x00888888
-#define COLOR_WALL_S	0x00AAAAAA
-#define COLOR_WALL_E	0x00888888
 #define LINE(a, b, c, d, e) &(t_line){a, b, c, d, e}
 #ifndef M_PI
 # define M_PI			3.14159265358979323846
@@ -73,7 +67,9 @@ typedef enum e_excode {
 	INIT_GAME	= 3,
 	INIT_MAP2D	= 4,
 	INIT_PERSO	= 5,
-	RENDERING	= 6,
+	TEXTURES	= 6,
+	COLORS		= 7,
+	RENDERING	= 8,
 }	e_excode;
 
 typedef enum e_type {
@@ -195,6 +191,8 @@ typedef struct s_game {
 	t_tex		tex_s;
 	t_tex		tex_e;
 	t_tex		tex_w;
+	int			ceiling;
+	int			floor;
 	double		wall_x;
 	t_ray		last_ray;
 }	t_game;
@@ -242,5 +240,7 @@ t_tex	*get_wall_tex(t_game *game, t_ray *r);
 int		load_texture(t_game *game, t_tex *tex, char *path);
 int		load_all_textures(t_game *game);
 void	draw_tex_col(t_game *game, int x, t_slice *s, t_tex *tex);
+
+int		load_colors(t_game *game);
 
 #endif // MAIN_H
