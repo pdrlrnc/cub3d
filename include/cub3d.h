@@ -19,6 +19,7 @@
 #include "libft.h"
 #include "structs.h"
 #include "mapper.h"
+#include "raycast.h"
 
 char	*get_next_line(int fd);
 
