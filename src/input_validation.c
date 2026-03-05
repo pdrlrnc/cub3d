@@ -44,6 +44,7 @@ t_scene	*validate_map(t_scene **scene, int map_fd)
 	read_input_values_to_list(scene, map_fd);
 	read_config_lines(scene, (*scene)->input_list);
 	read_map(scene, (*scene)->input_list);
+	check_for_doors(scene);
 	check_validity(scene);
 	if (!(*scene)->is_valid)
 		return (print_err(*scene), clean_scene(*scene), NULL);

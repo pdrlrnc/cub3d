@@ -27,6 +27,7 @@
 # define MAP_ERR_1 "Map isn't valid - there is a leak somewhere\n"
 # define MAP_ERR_2 "Invalid character found in the map\n"
 # define MAP_ERR_3 "Multiple player spawns given - there must only be 1\n"
+# define DOOR_ERR_1 "Door should have adjacent walls and adjacent walkable positions\n"
 
 //input_validation.c
 t_scene	*validate_input(int argc, char**argv);
@@ -97,6 +98,7 @@ void	check_line_trim_ptr(t_scene *scene, char *ptr, int fd);
 void	check_colour_range(t_scene **scene);
 void	check_validity(t_scene **scene);
 void	check_validity(t_scene **scene);
+void	check_for_doors(t_scene **scene);
 
 //stack.c
 t_point	*create_stack(int x, int y, int width, int height);

@@ -56,3 +56,45 @@ void	check_colour_range(t_scene **scene)
 	else if ((*scene)->sky_b < 0 || (*scene)->sky_b > 255)
 		add_err(scene, COLOUR_ERR_1);
 }
+
+static void	found_door(t_scene **scene, int i, int j)
+{
+	(*scene)->is_valid = 0;
+	if (i == 0 || j == (int)ft_strlen((*scene)->map[i])
+		|| j == 0 || !((*scene)->map[i + 1]))
+	{
+		add_err(scene, DOOR_ERR_1);
+		return ;
+	}
+	if ((*scene)->map[i + 1][j] == '1' && (*scene)->map[i - 1][j] == '1'
+		&& is_walkable((*scene)->map[i][j + 1])
+			&& is_walkable((*scene)->map[i][j - 1]))
+		(*scene)->is_valid = 1;
+	if ((*scene)->map[i][j + 1] == '1' && (*scene)->map[i][j - 1] == '1'
+		&& is_walkable((*scene)->map[i + 1][j])
+			&& is_walkable((*scene)->map[i - 1][j]))
+		(*scene)->is_valid = 1;
+	if (!(*scene)->is_valid)
+		add_err(scene, DOOR_ERR_1);
+}
+
+void	check_for_doors(t_scene **scene)
+{
+	int	i;
+	int	j;
+
+	if (!(*scene)->is_valid)
+		return ;
+	i = 0;
+	while ((*scene)->map[i] && (*scene)->is_valid)
+	{
+		j = 0;
+		while ((*scene)->map[i][j] && (*scene)->is_valid)
+		{
+			if ((*scene)->map[i][j] == 'D')
+				found_door(scene, i, j);
+			j++;
+		}
+		i++;
+	}
+}
