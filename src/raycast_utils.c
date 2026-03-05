@@ -23,13 +23,16 @@ int	hit(t_game *game, int pos_i_x, int pos_i_y)
 	rel_y = pos_i_y - game->cont2d.y1;
 	grid_x = rel_x / game->grid_size;
 	grid_y = rel_y / game->grid_size;
-	if (game->map2d[grid_y][grid_x].type == WALL)
+	if (game->map2d[grid_y][grid_x].type == WALL
+		|| game->map2d[grid_y][grid_x].type == DOOR)
 		return (1);
 	if (rel_x % game->grid_size == 0 && grid_x > 0
-		&& game->map2d[grid_y][grid_x - 1].type == WALL)
+		&& (game->map2d[grid_y][grid_x - 1].type == WALL
+			|| game->map2d[grid_y][grid_x].type == DOOR))
 		return (1);
 	if (rel_y % game->grid_size == 0 && grid_y > 0
-		&& game->map2d[grid_y - 1][grid_x].type == WALL)
+		&& (game->map2d[grid_y - 1][grid_x].type == WALL
+			||  game->map2d[grid_y][grid_x].type == DOOR))
 		return (1);
 	return (0);
 }
@@ -104,7 +107,8 @@ int	cast_ray_dda(t_game *game, double angle, double *dist)
 		if (r.map_x < 0 || r.map_x >= game->scene->map_w
 			|| r.map_y < 0 || r.map_y >= game->scene->map_h)
 			break ;
-		if (game->map2d[r.map_y][r.map_x].type == WALL)
+		if (game->map2d[r.map_y][r.map_x].type == WALL
+			|| game->map2d[r.map_y][r.map_x].type == DOOR)
 			break ;
 	}
 	*dist = r.side_y - r.delta_y;

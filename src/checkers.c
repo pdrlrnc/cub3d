@@ -69,11 +69,19 @@ static void	found_door(t_scene **scene, int i, int j)
 	if ((*scene)->map[i + 1][j] == '1' && (*scene)->map[i - 1][j] == '1'
 		&& is_walkable((*scene)->map[i][j + 1])
 			&& is_walkable((*scene)->map[i][j - 1]))
+	{
 		(*scene)->is_valid = 1;
+		(*scene)->map[i][j + 1] = 'X';
+		(*scene)->map[i][j - 1] = 'X';
+	}
 	if ((*scene)->map[i][j + 1] == '1' && (*scene)->map[i][j - 1] == '1'
 		&& is_walkable((*scene)->map[i + 1][j])
 			&& is_walkable((*scene)->map[i - 1][j]))
+	{
 		(*scene)->is_valid = 1;
+		(*scene)->map[i + 1][j] = 'X';
+		(*scene)->map[i - 1][j] = 'X';
+	}
 	if (!(*scene)->is_valid)
 		add_err(scene, DOOR_ERR_1);
 }

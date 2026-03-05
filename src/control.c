@@ -52,6 +52,8 @@ static int	key_release(int keycode, t_game *game)
 		else
 			game->fisheye = 1;
 	}
+	if (keycode == ON_E)
+		try_teleport(game);
 	return (0);
 }
 

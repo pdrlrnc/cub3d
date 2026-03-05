@@ -46,7 +46,8 @@ void	draw_2d_map(t_game *game, int color)
 		x = 0;
 		while (x < game->scene->map_w)
 		{
-			if (game->map2d[y][x].type == WALL)
+			if (game->map2d[y][x].type == WALL
+				|| game->map2d[y][x].type == DOOR)
 				fill_square(game, LINE(
 						game->map2d[y][x].pos_x,
 						game->map2d[y][x].pos_y,

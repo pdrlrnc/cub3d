@@ -17,6 +17,7 @@ SRC_FILES	= \
 	are_they1 \
 	are_they2 \
 	checkers \
+	door_teleport \
 	error_checker1 \
 	error_checker2 \
 	error_checker3 \

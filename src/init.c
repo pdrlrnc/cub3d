@@ -65,6 +65,8 @@ void	set_2d_point(t_game *game, int x, int y)
 	}
 	else if (game->scene->map[y][x] == 'D')
 		game->map2d[y][x].type = DOOR;
+	else if (game->scene->map[y][x] == 'X')
+		game->map2d[y][x].type = TELEPORT;
 	else
 		game->map2d[y][x].type = VOID;
 }

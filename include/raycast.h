@@ -59,6 +59,7 @@ typedef enum e_keys {
 	ON_KEYRELEASE	= 3,
 	ON_M			= 109,
 	ON_F			= 102,
+	ON_E			= 101,
 }	e_keys;
 
 typedef enum e_excode {
@@ -79,6 +80,7 @@ typedef enum e_type {
 	SPACE,
 	WALL,
 	DOOR,
+	TELEPORT,
 }	e_type;
 
 
@@ -245,5 +247,8 @@ int		load_all_textures(t_game *game);
 void	draw_tex_col(t_game *game, int x, t_slice *s, t_tex *tex);
 
 int		load_colors(t_game *game);
+
+//door_teleport.c
+void    try_teleport(t_game *game);
 
 #endif // MAIN_H
