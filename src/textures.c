@@ -17,12 +17,12 @@ t_tex	*get_wall_tex(t_game *game, t_ray *r)
 	if (r->side == 0)
 	{
 		if (r->dir_x > 0)
-			return (&game->tex_w);
-		return (&game->tex_e);
+			return (&game->tex_e);
+		return (&game->tex_w);
 	}
 	if (r->dir_y > 0)
-		return (&game->tex_n);
-	return (&game->tex_s);
+		return (&game->tex_s);
+	return (&game->tex_n);
 }
 
 int	load_texture(t_game *game, t_tex *tex, char *path)
@@ -45,6 +45,8 @@ int	load_all_textures(t_game *game)
 	if (!load_texture(game, &game->tex_e, game->scene->textures.tex_ea))
 		return (0);
 	if (!load_texture(game, &game->tex_w, game->scene->textures.tex_we))
+		return (0);
+	if (!load_texture(game, &game->tex_door, DOOR_TEXT))
 		return (0);
 	return (1);
 }

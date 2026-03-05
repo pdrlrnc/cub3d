@@ -63,6 +63,8 @@ void	set_2d_point(t_game *game, int x, int y)
 		else if (game->scene->map[y][x] == 'W')
 			game->player.angle = 180;
 	}
+	else if (game->scene->map[y][x] == 'D')
+		game->map2d[y][x].type = DOOR;
 	else
 		game->map2d[y][x].type = VOID;
 }

@@ -38,6 +38,7 @@
 #define RAD				20
 #define RAD_DIFF		30
 #define LINE(a, b, c, d, e) &(t_line){a, b, c, d, e}
+#define DOOR_TEXT		"textures/door.xpm"
 #ifndef M_PI
 # define M_PI			3.14159265358979323846
 #endif
@@ -192,6 +193,7 @@ typedef struct s_game {
 	t_tex		tex_s;
 	t_tex		tex_e;
 	t_tex		tex_w;
+	t_tex		tex_door;
 	int			ceiling;
 	int			floor;
 	double		wall_x;
