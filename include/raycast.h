@@ -125,6 +125,7 @@ typedef struct s_ray
 typedef struct s_slice
 {
 	double	height;
+	double	real_height;
 	int		mid_y;
 	int		start;
 	int		end;

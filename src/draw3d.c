@@ -20,6 +20,7 @@ static void	calc_wall_slice(t_game *game, double perp_dist, t_slice *s)
 	if (perp_dist < 0.001)
 		perp_dist = 0.001;
 	s->height = (game->grid_size * screen_h) / perp_dist;
+	s->real_height = s->height;
 	if (s->height > screen_h)
 		s->height = screen_h;
 	s->mid_y = (game->cont3d.y1 + game->cont3d.y2) / 2;

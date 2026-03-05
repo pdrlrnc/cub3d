@@ -97,10 +97,11 @@ clean:
 fclean: clean
 	@$(MAKE) -C $(LIBFT_DIR) --no-print-directory fclean
 	@$(RM) $(NAME)
-# 	@$(RM) $(MLX_LIB)
+	@$(RM) $(MLX_LIB) 
+	@$(RM) minilibx
 # 	@$(RM) *.cub
 
-re: fclean all
+re: download_mlx_linux 
 
 valgrind: $(NAME)
 	valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
@@ -112,6 +113,7 @@ download_mlx_linux: fclean
 	cp -r minilibx-linux/* $(MLX_LIB) && \
 	rm -rf minilibx minilibx-linux && \
 	make all -C $(MLX_LIB)
+	make
 
 run:
 	@clear
