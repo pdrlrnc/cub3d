@@ -41,7 +41,7 @@ int	_clean(t_game *game)
 	return (0);
 }
 
-int	__exit(t_game *game, e_excode code)
+int	__exit(t_game *game, t_excode_enum code)
 {
 	if (code > 0)
 		return (write(STDOUT_FILENO, "Error\n", 6), code);

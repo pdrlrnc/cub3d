@@ -10,9 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MAIN_H
-#define MAIN_H
-
+#ifndef RAYCAST_H
+# define RAYCAST_H
 
 // ##################################################
 // # LIBS
@@ -24,31 +23,28 @@
 # include <string.h>
 # include <unistd.h>
 
-
 // ##################################################
 // # VARS
 // ##################################################
-
-#define WIDTH			1600
-#define HEIGHT			800
-#define SIZE_MAP		(WIDTH / 8)
-#define PADDING_MAP		10
-#define	SIZE_PLAYER		5
-#define ANGLE_SPEED		0.5
-#define RAD				20
-#define RAD_DIFF		30
-#define LINE(a, b, c, d, e) &(t_line){a, b, c, d, e}
-#define DOOR_TEXT		"textures/door.xpm"
-#ifndef M_PI
-# define M_PI			3.14159265358979323846
-#endif
-
+# define WIDTH			1600
+# define HEIGHT			800
+# define SIZE_MAP		(WIDTH / 8)
+# define PADDING_MAP		10
+# define SIZE_PLAYER		5
+# define ANGLE_SPEED		0.5
+# define RAD				20
+# define RAD_DIFF		30
+# define LINE(a, b, c, d, e) &(t_line){a, b, c, d, e}
+# define DOOR_TEXT		"textures/door.xpm"
+# ifndef M_PI
+#  define M_PI			3.14159265358979323846
+# endif
 
 // ##################################################
 // # ENUM
 // ##################################################
-
-typedef enum e_keys {
+typedef enum e_keys
+{
 	ON_LEFT			= 65361,
 	ON_UP			= 65362,
 	ON_RIGHT		= 65363,
@@ -60,9 +56,10 @@ typedef enum e_keys {
 	ON_M			= 109,
 	ON_F			= 102,
 	ON_E			= 101,
-}	e_keys;
+}	t_keys_enum;
 
-typedef enum e_excode {
+typedef enum e_excode
+{
 	SUCCESS		= 0,
 	ALLOCATION	= 1,
 	PARSING		= 2,
@@ -72,17 +69,17 @@ typedef enum e_excode {
 	TEXTURES	= 6,
 	COLORS		= 7,
 	RENDERING	= 8,
-}	e_excode;
+}	t_excode_enum;
 
-typedef enum e_type {
+typedef enum e_type
+{
 	PERSO,
 	VOID,
 	SPACE,
 	WALL,
 	DOOR,
 	TELEPORT,
-}	e_type;
-
+}	t_type_enum;
 
 // ##################################################
 // # STRUCTS
@@ -134,7 +131,8 @@ typedef struct s_slice
 	int		end;
 }	t_slice;
 
-typedef struct s_img {
+typedef struct s_img
+{
 	void	*img;
 	char	*addr;
 	int		bitspp;
@@ -142,14 +140,16 @@ typedef struct s_img {
 	int		endian;
 }	t_img;
 
-typedef struct s_player {
+typedef struct s_player
+{
 	int		size;
 	double	pos_x;
 	double	pos_y;
 	double	angle; // between 0 and 360
 }	t_player;
 
-typedef struct s_keys {
+typedef struct s_keys
+{
 	int	a;
 	int	d;
 	int	left;
@@ -158,7 +158,8 @@ typedef struct s_keys {
 	int	down;
 }	t_keys;
 
-typedef struct s_cont {
+typedef struct s_cont
+{
 	int	x1;
 	int	y1;
 	int	x2;
@@ -166,16 +167,18 @@ typedef struct s_cont {
 	int	mid_y;
 }	t_cont;
 
-typedef struct s_grid {
+typedef struct s_grid
+{
 	char			init;
 	unsigned long	x;
 	unsigned long	y;
 	unsigned long	pos_x;
 	unsigned long	pos_y;
-	e_type			type;
+	t_type_enum		type;
 }	t_grid;
 
-typedef struct s_game {
+typedef struct s_game
+{
 	void		*mlx;
 	void		*mlx_win;
 	char		**map;
@@ -202,11 +205,9 @@ typedef struct s_game {
 	t_ray		last_ray;
 }	t_game;
 
-
 // ##################################################
 // # FUNCS
 // ##################################################
-
 void	put_line(t_game *game, t_line *l);
 void	_put_pixel(t_img *img, int x, int y, int color);
 void	listen_events(t_game *game);
@@ -239,7 +240,7 @@ int		is_wall_at(t_game *game, double x, double y);
 int		can_move(t_game *game, double new_x, double new_y);
 
 int		_clean(t_game *game);
-int		__exit(t_game *game, e_excode code);
+int		__exit(t_game *game, t_excode_enum code);
 
 t_tex	*get_wall_tex(t_game *game, t_ray *r);
 int		load_texture(t_game *game, t_tex *tex, char *path);
@@ -249,6 +250,6 @@ void	draw_tex_col(t_game *game, int x, t_slice *s, t_tex *tex);
 int		load_colors(t_game *game);
 
 //door_teleport.c
-void    try_teleport(t_game *game);
+void	try_teleport(t_game *game);
 
 #endif // MAIN_H
