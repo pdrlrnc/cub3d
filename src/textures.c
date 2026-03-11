@@ -14,17 +14,17 @@
 
 t_tex	*get_wall_tex(t_game *game, t_ray *r)
 {
-    if (game->map2d[r->map_y][r->map_x].type == DOOR)
-        return (&game->tex_door);
-    if (r->side == 0)
-    {
-        if (r->dir_x > 0)
-            return (&game->tex_e);
-        return (&game->tex_w);
-    }
-    if (r->dir_y > 0)
-        return (&game->tex_s);
-    return (&game->tex_n);
+	if (game->map2d[r->map_y][r->map_x].type == DOOR)
+		return (&game->tex_door);
+	if (r->side == 0)
+	{
+		if (r->dir_x > 0)
+			return (&game->tex_e);
+		return (&game->tex_w);
+	}
+	if (r->dir_y > 0)
+		return (&game->tex_s);
+	return (&game->tex_n);
 }
 
 int	load_texture(t_game *game, t_tex *tex, char *path)

@@ -40,6 +40,19 @@ int	init_game(t_game *game)
 	return (1);
 }
 
+static void	set_person(t_game *game, int x, int y)
+{
+	game->map2d[y][x].type = PERSO;
+	if (game->scene->map[y][x] == 'N')
+		game->player.angle = 270;
+	else if (game->scene->map[y][x] == 'E')
+		game->player.angle = 0;
+	else if (game->scene->map[y][x] == 'S')
+		game->player.angle = 90;
+	else if (game->scene->map[y][x] == 'W')
+		game->player.angle = 180;
+}
+
 void	set_2d_point(t_game *game, int x, int y)
 {
 	game->map2d[y][x].init = game->scene->map[y][x];
@@ -52,17 +65,7 @@ void	set_2d_point(t_game *game, int x, int y)
 	else if (game->scene->map[y][x] == '0')
 		game->map2d[y][x].type = SPACE;
 	else if (in(game->scene->map[y][x], "NESW"))
-	{
-		game->map2d[y][x].type = PERSO;
-		if (game->scene->map[y][x] == 'N')
-			game->player.angle = 270;
-		else if (game->scene->map[y][x] == 'E')
-			game->player.angle = 0;
-		else if (game->scene->map[y][x] == 'S')
-			game->player.angle = 90;
-		else if (game->scene->map[y][x] == 'W')
-			game->player.angle = 180;
-	}
+		set_person(game, x, y);
 	else if (game->scene->map[y][x] == 'D')
 		game->map2d[y][x].type = DOOR;
 	else if (game->scene->map[y][x] == 'X')

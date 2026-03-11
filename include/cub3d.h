@@ -11,15 +11,15 @@
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
- #define CUB3D_H
+# define CUB3D_H
 
-#include <stdio.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include "libft.h"
-#include "structs.h"
-#include "mapper.h"
-#include "raycast.h"
+# include <stdio.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include "libft.h"
+# include "structs.h"
+# include "mapper.h"
+# include "raycast.h"
 
 char	*get_next_line(int fd);
 

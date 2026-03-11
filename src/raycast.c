@@ -19,7 +19,6 @@ int	render(t_game *game)
 	if (game->minimap_active)
 	{
 		draw_2d_map(game, 0x0000000);
-		// draw_2d_grid(game, 0x00FF0000);
 		draw_2d_perso(game, 0x00FF0000 - 20000);
 		draw_2d_perso_dir(game,
 			game->player.pos_x + game->player.size / 2,

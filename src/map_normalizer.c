@@ -23,7 +23,6 @@ static void	normalize_map_cont(t_scene **scene,
 			normalized_map[ind->i][ind->j] = 'V';
 		else if ((*scene)->map[ind->l][ind->k] == 'D')
 			normalized_map[ind->i][ind->j] = '0';
-
 		else
 			normalized_map[ind->i][ind->j] = (*scene)->map[ind->l][ind->k];
 		ind->j++;

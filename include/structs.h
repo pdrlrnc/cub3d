@@ -28,10 +28,10 @@ typedef struct s_wall_tex
 	char	*tex_so;
 	char	*tex_we;
 	char	*tex_ea;
-	int	has_no;
-	int	has_so;
-	int	has_we;
-	int	has_ea;
+	int		has_no;
+	int		has_so;
+	int		has_we;
+	int		has_ea;
 }		t_wall_tex;
 
 typedef struct s_scene
@@ -51,7 +51,7 @@ typedef struct s_scene
 	int			sky_g;
 	int			sky_b;
 	int			is_valid;
-	char			**err_mess;
+	char		**err_mess;
 }		t_scene;
 
 typedef struct s_point
