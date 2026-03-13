@@ -68,12 +68,36 @@ static int	_clean_init_game(t_game *game)
 	return (ALLOCATION);
 }
 
+static int	_clean_init_map2d(t_game *game)
+{
+	int	y;
+
+	write(STDERR_FILENO, "Error\nAlloc error initiating 2d map", 35);
+	if (game->map2d)
+	{
+		y = 0;
+		while (game->map2d[y])
+			free(game->map2d[y++]);
+		free(game->map2d);
+	}
+	clean_scene(game->scene);
+	mlx_destroy_image(game->mlx, game->img.img);
+	mlx_destroy_window(game->mlx, game->mlx_win);
+	mlx_destroy_display(game->mlx);
+	free(game->mlx);
+	free(game);
+	exit(ALLOCATION);
+	return (ALLOCATION);
+}
+
 int	__exit(t_game *game, t_excode_enum code)
 {
 	if (!game->scene)
 		return (free(game), code);
 	if (code == INIT_GAME)
 		return (_clean_init_game(game));
+	if (code == INIT_MAP2D)
+		return (_clean_init_map2d(game));
 	if (code > 0)
 		return (write(STDOUT_FILENO, "Error\n", 6), code);
 	else

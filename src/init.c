@@ -94,10 +94,14 @@ int	init_2d_map(t_game *game)
 	if (game->grid_size < 2)
 		return (0);
 	game->map2d = malloc(sizeof(t_grid *) * game->nb_grids);
+	if (!game->map2d)
+		return (0);
 	y = 0;
 	while (y < game->scene->map_h)
 	{
 		game->map2d[y] = malloc(sizeof(t_grid) * game->nb_grids);
+		if (!game->map2d[y])
+			return (0);
 		x = 0;
 		while (x < game->scene->map_w)
 			set_2d_point(game, x++, y);
