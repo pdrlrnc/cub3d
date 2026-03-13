@@ -32,6 +32,7 @@ SRC_FILES	= \
 	utils \
 	my_mlx \
 	init \
+	init_utils \
 	draw2d \
 	draw3d \
 	textures \
@@ -52,7 +53,8 @@ LIBFT_A		= $(LIBFT_DIR)/libft.a
 
 CC			= cc
 # CFLAGS		= -g -O0 -I$(INC_DIR) -Iminilibx-linux -O3
-CFLAGS		= -g -O3 -ffast-math -Wall -Wextra -Werror -I$(INC_DIR) -Iminilibx-linux
+#CFLAGS		= -g -O3 -ffast-math -Wall -Wextra -Werror -I$(INC_DIR) -Iminilibx-linux
+CFLAGS			= -Wall -Wextra -Werror -I$(INC_DIR) -Iminilibx-linux
 RM			= rm -rf
 MOVE		= mv
 MAKE		= make --no-print-directory

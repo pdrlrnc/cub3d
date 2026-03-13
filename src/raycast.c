@@ -35,13 +35,18 @@ static t_game	*get_bzeroed_game(void)
 
 	game = malloc(sizeof(t_game));
 	if (!game)
-		return (write(STDERR_FILENO, "Error\nAlloc error for t_game", 28), NULL);
+		return (write(STDERR_FILENO,
+				"Error\nAlloc error for t_game", 28), NULL);
 	game->mlx = NULL;
 	game->mlx_win = NULL;
 	game->img.img = NULL;
 	game->img.addr = NULL;
+	game->tex_n.img = NULL;
+	game->tex_s.img = NULL;
+	game->tex_e.img = NULL;
+	game->tex_w.img = NULL;
+	game->tex_door.img = NULL;
 	return (game);
-
 }
 
 int	main(int argc, char **argv)

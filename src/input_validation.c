@@ -18,12 +18,14 @@ t_scene	*validate_input(int argc, char**argv)
 	t_scene	*scene;
 
 	if (argc != 2)
-		return (write(STDERR_FILENO, "Error\nYou need to give a .cub map as input\n", 43), NULL);
+		return (write(STDERR_FILENO,
+				"Error\nYou need to give a .cub map as input\n", 43), NULL);
 	if (ft_strlen(argv[1]) < 4 || ft_strcmp(ft_strrchr(argv[1], '.'), ".cub"))
 		return (write(STDERR_FILENO, "Error\nMap must be *.cub\n", 24), NULL);
 	fd = open(argv[1], O_RDONLY);
 	if (fd < 0)
-		return (write(STDERR_FILENO, "Error\nUnknown error opening map file\n", 37), NULL);
+		return (write(STDERR_FILENO,
+				"Error\nUnknown error opening map file\n", 37), NULL);
 	scene = get_bzeroed_scene();
 	return (validate_map(&(scene), fd));
 }

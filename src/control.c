@@ -14,7 +14,6 @@
 
 static int	key_press(int keycode, t_game *game)
 {
-	printf("keycode=%d\n", keycode);
 	if (keycode == ON_ESC)
 		__exit(game, SUCCESS);
 	if (keycode == ON_LEFT)
