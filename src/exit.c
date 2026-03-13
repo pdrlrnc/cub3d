@@ -43,10 +43,37 @@ int	_clean(t_game *game)
 	return (0);
 }
 
+static int	_clean_init_game(t_game *game)
+{
+	clean_scene(game->scene);
+	if (!game->mlx)
+		write(STDERR_FILENO, "Error\nAlloc error in mlx_init", 29);
+	else if (!game->mlx_win)
+		write(STDERR_FILENO, "Error\nAlloc error in mlx_new_window", 36);
+	else if (!game->img.img)
+		write(STDERR_FILENO, "Error\nAlloc error in mlx_new_image", 34);
+	else
+		write(STDERR_FILENO, "Error\nAlloc error in mlx_get_data_addr", 38);
+	if (game->img.img)
+		mlx_destroy_image(game->mlx, game->img.img);
+	if (game->mlx_win)
+		mlx_destroy_window(game->mlx, game->mlx_win);
+	if (game->mlx)
+	{
+		mlx_destroy_display(game->mlx);
+		free(game->mlx);
+	}
+	free(game);
+	exit(ALLOCATION);
+	return (ALLOCATION);
+}
+
 int	__exit(t_game *game, t_excode_enum code)
 {
 	if (!game->scene)
 		return (free(game), code);
+	if (code == INIT_GAME)
+		return (_clean_init_game(game));
 	if (code > 0)
 		return (write(STDOUT_FILENO, "Error\n", 6), code);
 	else

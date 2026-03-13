@@ -29,12 +29,28 @@ int	render(t_game *game)
 	return (1);
 }
 
-int	main(int argc, char **argv)
+static t_game	*get_bzeroed_game(void)
 {
 	t_game	*game;
 
 	game = malloc(sizeof(t_game));
-		
+	if (!game)
+		return (write(STDERR_FILENO, "Error\nAlloc error for t_game", 28), NULL);
+	game->mlx = NULL;
+	game->mlx_win = NULL;
+	game->img.img = NULL;
+	game->img.addr = NULL;
+	return (game);
+
+}
+
+int	main(int argc, char **argv)
+{
+	t_game	*game;
+
+	game = get_bzeroed_game();
+	if (!game)
+		return (ALLOCATION);
 	game->scene = validate_input(argc, argv);
 	if (!game->scene)
 		return (__exit(game, PARSING));

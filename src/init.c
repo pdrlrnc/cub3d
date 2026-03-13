@@ -15,10 +15,18 @@
 int	init_game(t_game *game)
 {
 	game->mlx = mlx_init();
+	if (!game->mlx)
+		return (0);
 	game->mlx_win = mlx_new_window(game->mlx, WIDTH, HEIGHT, "Cub3D");
+	if (!game->mlx_win)
+		return (0);
 	game->img.img = mlx_new_image(game->mlx, WIDTH, HEIGHT);
+	if (!game->img.img)
+		return (0);
 	game->img.addr = mlx_get_data_addr(game->img.img, &game->img.bitspp,
 			&game->img.lsize, &game->img.endian);
+	if (!game->img.addr)
+		return (0);
 	game->keys.a = 0;
 	game->keys.d = 0;
 	game->keys.left = 0;
