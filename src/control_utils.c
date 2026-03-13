@@ -35,28 +35,51 @@ int	can_move(t_game *game, double new_x, double new_y)
 	cy = new_y + game->player.size / 2.0;
 	if (is_wall_at(game, cx, cy))
 		return (0);
-	if (is_wall_at(game, cx, cy))
-		return (0);
-	if (is_wall_at(game, cx, cy))
-		return (0);
-	if (is_wall_at(game, cx, cy))
-		return (0);
 	return (1);
 }
-/*
-int	can_move(t_game *game, double new_x, double new_y)
-{
-	double	size;
 
-	size = 1;
-	if (is_wall_at(game, new_x, new_y))
-		return (0);
-	if (is_wall_at(game, new_x + size, new_y))
-		return (0);
-	if (is_wall_at(game, new_x, new_y + size))
-		return (0);
-	if (is_wall_at(game, new_x + size, new_y + size))
-		return (0);
-	return (1);
+void	move_up_down(t_game *game, double rad, double speed)
+{
+	double	move_x;
+	double	move_y;
+
+	move_x = cos(rad) * speed;
+	move_y = sin(rad) * speed;
+	if (game->keys.up)
+	{
+		if (can_move(game, game->player.pos_x + move_x, game->player.pos_y))
+			game->player.pos_x += move_x;
+		if (can_move(game, game->player.pos_x, game->player.pos_y + move_y))
+			game->player.pos_y += move_y;
+	}
+	if (game->keys.down)
+	{
+		if (can_move(game, game->player.pos_x - move_x, game->player.pos_y))
+			game->player.pos_x -= move_x;
+		if (can_move(game, game->player.pos_x, game->player.pos_y - move_y))
+			game->player.pos_y -= move_y;
+	}
 }
-*/
+
+void	move_right_left(t_game *game, double rad, double speed)
+{
+	double	move_x;
+	double	move_y;
+
+	move_x = -sin(rad) * speed;
+	move_y = cos(rad) * speed;
+	if (game->keys.mright)
+	{
+		if (can_move(game, game->player.pos_x + move_x, game->player.pos_y))
+			game->player.pos_x += move_x;
+		if (can_move(game, game->player.pos_x, game->player.pos_y + move_y))
+			game->player.pos_y += move_y;
+	}
+	if (game->keys.mleft)
+	{
+		if (can_move(game, game->player.pos_x - move_x, game->player.pos_y))
+			game->player.pos_x -= move_x;
+		if (can_move(game, game->player.pos_x, game->player.pos_y - move_y))
+			game->player.pos_y -= move_y;
+	}
+}

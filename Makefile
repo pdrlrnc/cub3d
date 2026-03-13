@@ -30,6 +30,7 @@ SRC_FILES	= \
 	reader2 \
 	stack \
 	utils \
+	utils2 \
 	my_mlx \
 	init \
 	init_utils \
@@ -52,8 +53,6 @@ LIBFT_DIR	= $(SRC_DIR)/libft
 LIBFT_A		= $(LIBFT_DIR)/libft.a
 
 CC			= cc
-# CFLAGS		= -g -O0 -I$(INC_DIR) -Iminilibx-linux -O3
-#CFLAGS		= -g -O3 -ffast-math -Wall -Wextra -Werror -I$(INC_DIR) -Iminilibx-linux
 CFLAGS			= -Wall -Wextra -Werror -I$(INC_DIR) -Iminilibx-linux
 RM			= rm -rf
 MOVE		= mv
@@ -64,7 +63,7 @@ INCLUDE		= -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
 SRC		= $(addprefix $(SRC_DIR)/, $(addsuffix .c,$(SRC_FILES)))
 OBJ		= $(addprefix $(OBJ_DIR)/, $(addsuffix .o,$(SRC_FILES)))
 
-RED			=\033[0;31m
+RED		=\033[0;31m
 VIOLET		:= \033[38;5;129m
 DEF_COLOUR	=\033[0m
 
@@ -102,12 +101,8 @@ fclean: clean
 	@$(RM) $(NAME)
 	@$(RM) $(MLX_LIB) 
 	@$(RM) minilibx
-# 	@$(RM) *.cub
 
-re: download_mlx_linux 
-
-valgrind: $(NAME)
-	valgrind --leak-check=full --show-leak-kinds=all ./$(NAME)
+re:  fclean all
 
 download_mlx_linux: fclean
 	@curl https://cdn.intra.42.fr/document/document/46338/minilibx-linux.tgz -o minilibx && \
@@ -118,14 +113,4 @@ download_mlx_linux: fclean
 	make all -C $(MLX_LIB)
 	make
 
-run:
-	@clear
-	@make re
-	@./$(NAME) maps/simple.cub
-
-runvalgrind:
-	@clear
-	@make re
-	@valgrind --leak-check=full --track-origins=yes ./$(NAME) maps/simple.cub
-
-.PHONY: all clean fclean re valgrind download_mlx_linux run runvalgrind
+.PHONY: all clean fclean re download_mlx_linux 

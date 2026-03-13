@@ -17,7 +17,9 @@ int	init_game_cont(t_game *game)
 	game->keys.a = 0;
 	game->keys.d = 0;
 	game->keys.left = 0;
+	game->keys.mleft = 0;
 	game->keys.right = 0;
+	game->keys.mright = 0;
 	game->keys.up = 0;
 	game->keys.down = 0;
 	game->cont2d.x1 = PADDING_MAP;

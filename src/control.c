@@ -18,11 +18,15 @@ static int	key_press(int keycode, t_game *game)
 		__exit(game, SUCCESS);
 	if (keycode == ON_LEFT)
 		game->keys.left = 1;
-	if (keycode == ON_UP)
+	if (keycode == ON_A)
+		game->keys.mleft = 1;
+	if (keycode == ON_W)
 		game->keys.up = 1;
 	if (keycode == ON_RIGHT)
 		game->keys.right = 1;
-	if (keycode == ON_DOWN)
+	if (keycode == ON_D)
+		game->keys.mright = 1;
+	if (keycode == ON_S)
 		game->keys.down = 1;
 	return (0);
 }
@@ -31,26 +35,20 @@ static int	key_release(int keycode, t_game *game)
 {
 	if (keycode == ON_LEFT)
 		game->keys.left = 0;
-	if (keycode == ON_UP)
+	if (keycode == ON_A)
+		game->keys.mleft = 0;
+	if (keycode == ON_W)
 		game->keys.up = 0;
 	if (keycode == ON_RIGHT)
 		game->keys.right = 0;
-	if (keycode == ON_DOWN)
+	if (keycode == ON_D)
+		game->keys.mright = 0;
+	if (keycode == ON_S)
 		game->keys.down = 0;
 	if (keycode == ON_M)
-	{
-		if (game->minimap_active == 1)
-			game->minimap_active = 0;
-		else
-			game->minimap_active = 1;
-	}
+		game->minimap_active = _switch(game->minimap_active);
 	if (keycode == ON_F)
-	{
-		if (game->fisheye == 1)
-			game->fisheye = 0;
-		else
-			game->fisheye = 1;
-	}
+		game->fisheye = _switch(game->fisheye);
 	if (keycode == ON_E)
 		try_teleport(game);
 	return (0);
@@ -73,27 +71,11 @@ int	game_loop(t_game *game)
 {
 	double	rad;
 	double	speed;
-	double	move_x;
-	double	move_y;
 
 	speed = game->grid_size * 0.05;
 	rad = define_angle(game);
-	move_x = cos(rad) * speed;
-	move_y = sin(rad) * speed;
-	if (game->keys.up)
-	{
-		if (can_move(game, game->player.pos_x + move_x, game->player.pos_y))
-			game->player.pos_x += move_x;
-		if (can_move(game, game->player.pos_x, game->player.pos_y + move_y))
-			game->player.pos_y += move_y;
-	}
-	if (game->keys.down)
-	{
-		if (can_move(game, game->player.pos_x - move_x, game->player.pos_y))
-			game->player.pos_x -= move_x;
-		if (can_move(game, game->player.pos_x, game->player.pos_y - move_y))
-			game->player.pos_y -= move_y;
-	}
+	move_up_down(game, rad, speed);
+	move_right_left(game, rad, speed);
 	render(game);
 	return (1);
 }

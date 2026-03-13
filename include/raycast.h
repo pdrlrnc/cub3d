@@ -45,13 +45,15 @@
 typedef enum e_keys
 {
 	ON_LEFT			= 65361,
-	ON_UP			= 65362,
 	ON_RIGHT		= 65363,
-	ON_DOWN			= 65364,
 	ON_ESC			= 65307,
 	ON_DESTROY		= 17,
 	ON_KEYPRESS		= 2,
 	ON_KEYRELEASE	= 3,
+	ON_W			= 119,
+	ON_A			= 97,
+	ON_S			= 115,
+	ON_D			= 100,
 	ON_M			= 109,
 	ON_F			= 102,
 	ON_E			= 101,
@@ -156,7 +158,9 @@ typedef struct s_keys
 	int	a;
 	int	d;
 	int	left;
+	int	mleft;
 	int	right;
+	int	mright;
 	int	up;
 	int	down;
 }	t_keys;
@@ -238,11 +242,14 @@ int		in(char c, char *set);
 double	normalize_angle(double angle);
 t_coord	_get_coord(int x, int y);
 t_line	_get_line(t_coord p1, t_coord p2, int color);
+int		_switch(int val);
 
 int		render(t_game *game);
 
 int		is_wall_at(t_game *game, double x, double y);
 int		can_move(t_game *game, double new_x, double new_y);
+void	move_up_down(t_game *game, double rad, double speed);
+void	move_right_left(t_game *game, double rad, double speed);
 
 int		_clean(t_game *game);
 int		__exit(t_game *game, t_excode_enum code);
