@@ -18,10 +18,7 @@ int	_clean(t_game *game)
 
 	y = 0;
 	while (y < game->scene->map_h)
-	{
-		free(game->map2d[y]);
-		y++;
-	}
+		free(game->map2d[y++]);
 	free(game->map2d);
 	clean_scene(game->scene);
 	if (game->tex_n.img)
@@ -32,6 +29,8 @@ int	_clean(t_game *game)
 		mlx_destroy_image(game->mlx, game->tex_e.img);
 	if (game->tex_w.img)
 		mlx_destroy_image(game->mlx, game->tex_w.img);
+	if (game->tex_door.img)
+		mlx_destroy_image(game->mlx, game->tex_door.img);
 	mlx_destroy_image(game->mlx, game->img.img);
 	mlx_destroy_window(game->mlx, game->mlx_win);
 	mlx_destroy_display(game->mlx);
@@ -41,10 +40,61 @@ int	_clean(t_game *game)
 	return (0);
 }
 
+static int	_clean_init_game(t_game *game)
+{
+	clean_scene(game->scene);
+	if (!game->mlx)
+		write(STDERR_FILENO, "Error\nAlloc error in mlx_init\n", 30);
+	else if (!game->mlx_win)
+		write(STDERR_FILENO, "Error\nAlloc error in mlx_new_window\n", 37);
+	else if (!game->img.img)
+		write(STDERR_FILENO, "Error\nAlloc error in mlx_new_image\n", 35);
+	else
+		write(STDERR_FILENO, "Error\nAlloc error in mlx_get_data_addr\n", 39);
+	if (game->img.img)
+		mlx_destroy_image(game->mlx, game->img.img);
+	if (game->mlx_win)
+		mlx_destroy_window(game->mlx, game->mlx_win);
+	if (game->mlx)
+	{
+		mlx_destroy_display(game->mlx);
+		free(game->mlx);
+	}
+	free(game);
+	exit(ALLOCATION);
+	return (ALLOCATION);
+}
+
+static int	_clean_init_map2d(t_game *game)
+{
+	int	y;
+
+	write(STDERR_FILENO, "Error\nAlloc error initiating 2d map\n", 36);
+	if (game->map2d)
+	{
+		y = 0;
+		while (game->map2d[y])
+			free(game->map2d[y++]);
+		free(game->map2d);
+	}
+	clean_scene(game->scene);
+	mlx_destroy_image(game->mlx, game->img.img);
+	mlx_destroy_window(game->mlx, game->mlx_win);
+	mlx_destroy_display(game->mlx);
+	free(game->mlx);
+	free(game);
+	exit(ALLOCATION);
+	return (ALLOCATION);
+}
+
 int	__exit(t_game *game, t_excode_enum code)
 {
-	if (code > 0)
-		return (write(STDOUT_FILENO, "Error\n", 6), code);
+	if (!game->scene)
+		return (free(game), code);
+	else if (code == INIT_GAME)
+		return (_clean_init_game(game));
+	else if (code == INIT_MAP2D)
+		return (_clean_init_map2d(game));
 	else
 		return (_clean(game), code);
 }

@@ -257,4 +257,7 @@ int		load_colors(t_game *game);
 //door_teleport.c
 void	try_teleport(t_game *game);
 
+//init_game_cont.c
+int		init_game_cont(t_game *game);
+
 #endif // MAIN_H

@@ -15,29 +15,19 @@
 int	init_game(t_game *game)
 {
 	game->mlx = mlx_init();
+	if (!game->mlx)
+		return (0);
 	game->mlx_win = mlx_new_window(game->mlx, WIDTH, HEIGHT, "Cub3D");
+	if (!game->mlx_win)
+		return (0);
 	game->img.img = mlx_new_image(game->mlx, WIDTH, HEIGHT);
+	if (!game->img.img)
+		return (0);
 	game->img.addr = mlx_get_data_addr(game->img.img, &game->img.bitspp,
 			&game->img.lsize, &game->img.endian);
-	game->keys.a = 0;
-	game->keys.d = 0;
-	game->keys.left = 0;
-	game->keys.right = 0;
-	game->keys.up = 0;
-	game->keys.down = 0;
-	game->cont2d.x1 = PADDING_MAP;
-	game->cont2d.x2 = PADDING_MAP + SIZE_MAP;
-	game->cont2d.y1 = HEIGHT - PADDING_MAP - SIZE_MAP;
-	game->cont2d.y2 = HEIGHT - PADDING_MAP;
-	game->cont3d.x1 = 0;
-	game->cont3d.x2 = WIDTH;
-	game->cont3d.y1 = 0;
-	game->cont3d.y2 = HEIGHT;
-	game->cont3d.mid_y = (game->cont3d.y1 + game->cont3d.y2) / 2;
-	game->nb_rays = game->cont3d.x2 - game->cont3d.x1;
-	game->minimap_active = 1;
-	game->fisheye = 0;
-	return (1);
+	if (!game->img.addr)
+		return (0);
+	return (init_game_cont(game));
 }
 
 static void	set_person(t_game *game, int x, int y)
@@ -84,10 +74,14 @@ int	init_2d_map(t_game *game)
 	if (game->grid_size < 1)
 		return (0);
 	game->map2d = malloc(sizeof(t_grid *) * game->nb_grids);
+	if (!game->map2d)
+		return (0);
 	y = 0;
 	while (y < game->scene->map_h)
 	{
 		game->map2d[y] = malloc(sizeof(t_grid) * game->nb_grids);
+		if (!game->map2d[y])
+			return (0);
 		x = 0;
 		while (x < game->scene->map_w)
 			set_2d_point(game, x++, y);
