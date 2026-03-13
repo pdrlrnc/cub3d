@@ -32,6 +32,8 @@ int	_clean(t_game *game)
 		mlx_destroy_image(game->mlx, game->tex_e.img);
 	if (game->tex_w.img)
 		mlx_destroy_image(game->mlx, game->tex_w.img);
+	if (game->tex_door.img)
+		mlx_destroy_image(game->mlx, game->tex_door.img);
 	mlx_destroy_image(game->mlx, game->img.img);
 	mlx_destroy_window(game->mlx, game->mlx_win);
 	mlx_destroy_display(game->mlx);
@@ -43,6 +45,8 @@ int	_clean(t_game *game)
 
 int	__exit(t_game *game, t_excode_enum code)
 {
+	if (!game->scene)
+		return (free(game), code);
 	if (code > 0)
 		return (write(STDOUT_FILENO, "Error\n", 6), code);
 	else

@@ -34,6 +34,7 @@ int	main(int argc, char **argv)
 	t_game	*game;
 
 	game = malloc(sizeof(t_game));
+		
 	game->scene = validate_input(argc, argv);
 	if (!game->scene)
 		return (__exit(game, PARSING));
