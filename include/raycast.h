@@ -28,7 +28,7 @@
 // ##################################################
 # define WIDTH			1600
 # define HEIGHT			800
-# define SIZE_MAP		(WIDTH / 8)
+# define SIZE_MAP		200	
 # define PADDING_MAP		10
 # define SIZE_PLAYER		5
 # define ANGLE_SPEED		0.5
