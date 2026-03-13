@@ -31,10 +31,9 @@
 # define SIZE_MAP		200	
 # define PADDING_MAP		10
 # define SIZE_PLAYER		5
-# define ANGLE_SPEED		0.5
+# define ANGLE_SPEED		2
 # define RAD				20
 # define RAD_DIFF		30
-# define LINE(a, b, c, d, e) &(t_line){a, b, c, d, e}
 # define DOOR_TEXT		"textures/door.xpm"
 # ifndef M_PI
 #  define M_PI			3.14159265358979323846
@@ -96,13 +95,17 @@ typedef struct s_tex
 	int		endian;
 }	t_tex;
 
+typedef struct s_coord
+{
+	int	x;
+	int	y;
+}		t_coord;
+
 typedef struct s_line
 {
-	int	x1;
-	int	y1;
-	int	x2;
-	int	y2;
-	int	color;
+	t_coord	p1;
+	t_coord	p2;
+	int		color;
 }	t_line;
 
 typedef struct s_ray
@@ -233,6 +236,8 @@ int		init_player(t_game *game);
 int		max(int x1, int x2);
 int		in(char c, char *set);
 double	normalize_angle(double angle);
+t_coord	_get_coord(int x, int y);
+t_line	_get_line(t_coord p1, t_coord p2, int color);
 
 int		render(t_game *game);
 

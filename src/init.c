@@ -80,10 +80,8 @@ int	init_2d_map(t_game *game)
 	int	x;
 
 	game->nb_grids = max(game->scene->map_w, game->scene->map_h);
-	while (SIZE_MAP % game->nb_grids != 0)
-		game->nb_grids++;
 	game->grid_size = SIZE_MAP / game->nb_grids;
-	if (game->grid_size < 2)
+	if (game->grid_size < 1)
 		return (0);
 	game->map2d = malloc(sizeof(t_grid *) * game->nb_grids);
 	y = 0;

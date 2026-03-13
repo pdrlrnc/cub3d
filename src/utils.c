@@ -40,3 +40,22 @@ double	normalize_angle(double angle)
 		angle -= 360;
 	return (angle);
 }
+
+t_coord	_get_coord(int x, int y)
+{
+	t_coord	coord;
+
+	coord.x = x;
+	coord.y = y;
+	return (coord);
+}
+
+t_line	_get_line(t_coord p1, t_coord p2, int color)
+{
+	t_line	line;
+
+	line.p1 = p1;
+	line.p2 = p2;
+	line.color = color;
+	return (line);
+}

@@ -14,31 +14,33 @@
 
 void	draw_2d_grid(t_game *game, int color)
 {
-	int	i;
+	int		i;
+	t_coord	p1;
+	t_coord	p2;
+	t_line	line;
 
 	i = 0;
 	while (i <= SIZE_MAP)
 	{
-		put_line(game, LINE(
-				game->cont2d.x1 + i,
-				game->cont2d.y1,
-				game->cont2d.x1 + i,
-				game->cont2d.y2,
-				color));
-		put_line(game, LINE(
-				game->cont2d.x1,
-				game->cont2d.y1 + i,
-				game->cont2d.x2,
-				game->cont2d.y1 + i,
-				color));
+		p1 = _get_coord(game->cont2d.x1 + i, game->cont2d.y1);
+		p2 = _get_coord(game->cont2d.x1 + i, game->cont2d.y2);
+		line = _get_line(p1, p2, color);
+		put_line(game, &line);
+		p1 = _get_coord(game->cont2d.x1, game->cont2d.y1 + i);
+		p2 = _get_coord(game->cont2d.x2, game->cont2d.y1 + i);
+		line = _get_line(p1, p2, color);
+		put_line(game, &line);
 		i += game->grid_size;
 	}
 }
 
 void	draw_2d_map(t_game *game, int color)
 {
-	int	x;
-	int	y;
+	int		x;
+	int		y;
+	t_coord	p1;
+	t_coord	p2;
+	t_line	line;
 
 	y = 0;
 	while (y < game->scene->map_h)
@@ -48,12 +50,13 @@ void	draw_2d_map(t_game *game, int color)
 		{
 			if (game->map2d[y][x].type == WALL
 				|| game->map2d[y][x].type == DOOR)
-				fill_square(game, LINE(
-						game->map2d[y][x].pos_x,
-						game->map2d[y][x].pos_y,
-						0,
-						0,
-						color), game->grid_size);
+			{
+				p1 = _get_coord(game->map2d[y][x].pos_x,
+						game->map2d[y][x].pos_y);
+				p2 = _get_coord(0, 0);
+				line = _get_line(p1, p2, color);
+				fill_square(game, &line, game->grid_size);
+			}
 			x++;
 		}
 		y++;
@@ -87,10 +90,12 @@ void	draw_2d_perso_dir(t_game *game, int x, int y, int color)
 
 void	draw_2d_perso(t_game *game, int color)
 {
-	fill_square(game, LINE(
-			game->player.pos_x,
-			game->player.pos_y,
-			0,
-			0,
-			color), game->player.size);
+	t_coord	p1;
+	t_coord	p2;
+	t_line	line;
+
+	p1 = _get_coord(game->player.pos_x, game->player.pos_y);
+	p2 = _get_coord(0, 0);
+	line = _get_line(p1, p2, color);
+	fill_square(game, &line, game->player.size);
 }

@@ -77,7 +77,7 @@ int	game_loop(t_game *game)
 	double	move_x;
 	double	move_y;
 
-	speed = game->grid_size * 0.02;
+	speed = game->grid_size * 0.05;
 	rad = define_angle(game);
 	move_x = cos(rad) * speed;
 	move_y = sin(rad) * speed;

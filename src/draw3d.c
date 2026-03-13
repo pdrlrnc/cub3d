@@ -35,11 +35,20 @@ static void	calc_wall_slice(t_game *game, double perp_dist, t_slice *s)
 static void	draw_wall_col(t_game *game, int x, t_slice *s)
 {
 	t_tex	*tex;
+	t_coord	p1;
+	t_coord	p2;
+	t_line	line;
 
-	put_line(game, LINE(x, game->cont3d.y1, x, s->start, game->ceiling));
+	p1 = _get_coord(x, game->cont3d.y1);
+	p2 = _get_coord(x, s->start);
+	line = _get_line(p1, p2, game->ceiling);
+	put_line(game, &line);
 	tex = get_wall_tex(game, &game->last_ray);
 	draw_tex_col(game, x, s, tex);
-	put_line(game, LINE(x, s->end, x, game->cont3d.y2, game->floor));
+	p1 = _get_coord(x, s->end);
+	p2 = _get_coord(x, game->cont3d.y2);
+	line = _get_line(p1, p2, game->floor);
+	put_line(game, &line);
 }
 
 void	draw_3d_view(t_game *game, double init_angle)

@@ -14,21 +14,19 @@
 
 void	fill_square(t_game *game, t_line *l, int size)
 {
-	int	i;
-	int	x;
-	int	y;
+	int		i;
+	int		x;
+	int		y;
+	t_line	line;
 
 	i = 0;
-	x = l->x1;
-	y = l->y1;
+	x = l->p1.x;
+	y = l->p1.y;
 	while (i < size)
 	{
-		put_line(game, LINE(
-				x + i,
-				y,
-				x + i,
-				y + size,
-				l->color));
+		line = _get_line(_get_coord(x + i, y),
+				_get_coord(x + i, y + size), l->color);
+		put_line(game, &line);
 		i++;
 	}
 }
@@ -48,23 +46,23 @@ static void	drawh(t_game *game, t_line *l)
 	int	p;
 	int	dir;
 
-	dx = l->x2 - l->x1;
-	dy = l->y2 - l->y1;
+	dx = l->p2.x - l->p1.x;
+	dy = l->p2.y - l->p1.y;
 	dir = 1;
 	if (dy < 0)
 		dir = -dir;
 	dy *= dir;
 	p = 2 * dy - dx;
-	while (l->x1 <= l->x2)
+	while (l->p1.x <= l->p2.x)
 	{
-		_put_pixel(&game->img, l->x1, l->y1, l->color);
+		_put_pixel(&game->img, l->p1.x, l->p1.y, l->color);
 		if (p >= 0)
 		{
-			l->y1 += dir;
+			l->p1.y += dir;
 			p -= 2 * dx;
 		}
 		p += 2 * dy;
-		l->x1++;
+		l->p1.x++;
 	}
 }
 
@@ -75,42 +73,47 @@ static void	drawv(t_game *game, t_line *l)
 	int	p;
 	int	dir;
 
-	dx = l->x2 - l->x1;
-	dy = l->y2 - l->y1;
+	dx = l->p2.x - l->p1.x;
+	dy = l->p2.y - l->p1.y;
 	dir = 1;
 	if (dx < 0)
 		dir = -dir;
 	dx *= dir;
 	p = 2 * dx - dy;
-	while (l->y1 <= l->y2)
+	while (l->p1.y <= l->p2.y)
 	{
-		_put_pixel(&game->img, l->x1, l->y1, l->color);
+		_put_pixel(&game->img, l->p1.x, l->p1.y, l->color);
 		if (p >= 0)
 		{
-			l->x1 += dir;
+			l->p1.x += dir;
 			p -= 2 * dy;
 		}
 		p += 2 * dx;
-		l->y1++;
+		l->p1.y++;
 	}
 }
 
 void	put_line(t_game *game, t_line *l)
 {
 	t_line	tmp;
+	t_line	line;
 
 	tmp = *l;
-	if (abs(tmp.x2 - tmp.x1) > abs(tmp.y2 - tmp.y1))
+	if (abs(tmp.p2.x - tmp.p1.x) > abs(tmp.p2.y - tmp.p1.y))
 	{
-		if (tmp.x1 > tmp.x2)
-			drawh(game, LINE(tmp.x2, tmp.y2, tmp.x1, tmp.y1, tmp.color));
+		line = _get_line(_get_coord(tmp.p2.x, tmp.p2.y),
+				_get_coord(tmp.p1.x, tmp.p1.y), tmp.color);
+		if (tmp.p1.x > tmp.p2.x)
+			drawh(game, &line);
 		else
 			drawh(game, &tmp);
 	}
 	else
 	{
-		if (tmp.y1 > tmp.y2)
-			drawv(game, LINE(tmp.x2, tmp.y2, tmp.x1, tmp.y1, tmp.color));
+		line = _get_line(_get_coord(tmp.p2.x, tmp.p2.y),
+				_get_coord(tmp.p1.x, tmp.p1.y), tmp.color);
+		if (tmp.p1.y > tmp.p2.y)
+			drawv(game, &line);
 		else
 			drawv(game, &tmp);
 	}

@@ -25,7 +25,7 @@ int	is_wall_at(t_game *game, double x, double y)
 	return (game->map2d[grid_y][grid_x].type == WALL
 			|| game->map2d[grid_y][grid_x].type == DOOR);
 }
-/*
+
 int	can_move(t_game *game, double new_x, double new_y)
 {
 	double	cx;
@@ -43,13 +43,12 @@ int	can_move(t_game *game, double new_x, double new_y)
 		return (0);
 	return (1);
 }
-*/
-
+/*
 int	can_move(t_game *game, double new_x, double new_y)
 {
 	double	size;
 
-	size = game->player.size;
+	size = 1;
 	if (is_wall_at(game, new_x, new_y))
 		return (0);
 	if (is_wall_at(game, new_x + size, new_y))
@@ -60,3 +59,4 @@ int	can_move(t_game *game, double new_x, double new_y)
 		return (0);
 	return (1);
 }
+*/
