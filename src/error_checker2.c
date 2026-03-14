@@ -41,7 +41,11 @@ void	add_err(t_scene **scene, char *err_mess)
 	(*scene)->is_valid = 0;
 	i = 0;
 	while ((*scene)->err_mess[i])
+	{
+		if (!ft_strcmp(err_mess, (*scene)->err_mess[i]))
+			return ;
 		i++;
+	}
 	(*scene)->err_mess[i] = err_mess;
 }
 

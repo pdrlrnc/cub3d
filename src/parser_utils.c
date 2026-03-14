@@ -55,6 +55,8 @@ t_scene	*get_bzeroed_scene(void)
 	}
 	scene->map = NULL;
 	scene->input_list = NULL;
+	scene->has_floor_rgb = 0;
+	scene->has_sky_rgb = 0;
 	get_bzeroed_scene_cont(scene);
 	return (scene);
 }

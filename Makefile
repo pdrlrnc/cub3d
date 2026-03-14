@@ -28,6 +28,7 @@ SRC_FILES	= \
 	parser_utils \
 	reader1 \
 	reader2 \
+	reader3 \
 	stack \
 	utils \
 	utils2 \

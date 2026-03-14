@@ -47,9 +47,11 @@ typedef struct s_scene
 	int			floor_r;
 	int			floor_g;
 	int			floor_b;
+	int			has_floor_rgb;
 	int			sky_r;
 	int			sky_g;
 	int			sky_b;
+	int			has_sky_rgb;
 	int			is_valid;
 	char		**err_mess;
 }		t_scene;

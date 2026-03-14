@@ -17,14 +17,15 @@ void	read_input_values_to_list(t_scene **scene, int map_fd)
 	char	*line;
 
 	line = get_next_line(map_fd);
+	if (!line)
+		add_err(scene, MISS_INPUT_5);
 	while (line)
 	{
 		if (ft_strchr(line, '\n') && ft_strlen(line) > 1)
 			*(line + ft_strlen(line) - 1) = '\0';
 		if (!is_valid_line(line))
 			add_err(scene, PARSE_ERR_3);
-		if (is_sky_or_floor(line) || is_texture_line(line))
-			line = trim_line(scene, line, map_fd);
+		line = validate_colour_or_text_line(scene, line, map_fd);
 		if (!(*scene)->input_list)
 		{
 			(*scene)->input_list = ft_lstnew(ft_strdup(line));
@@ -126,19 +127,7 @@ void	read_colours(t_scene **scene, char **split, char colour, char **splt)
 	if (ft_splitlen(values) != 3 || !ft_str_isdigit(values[0])
 		|| !ft_str_isdigit(values[1]) || !ft_str_isdigit(values[2]))
 		add_err(scene, WEIRD_INPUT_1);
-	else if (colour == 'F' && ((*scene)->floor_r == -1))
-	{
-		(*scene)->floor_r = ft_atoi(values[0]);
-		(*scene)->floor_g = ft_atoi(values[1]);
-		(*scene)->floor_b = ft_atoi(values[2]);
-	}
-	else if (colour == 'C' && ((*scene)->sky_r == -1))
-	{
-		(*scene)->sky_r = ft_atoi(values[0]);
-		(*scene)->sky_g = ft_atoi(values[1]);
-		(*scene)->sky_b = ft_atoi(values[2]);
-	}
-	else
+	else if (!read_rgb_colours(scene, values, colour))
 		add_err(scene, WEIRD_INPUT_1);
 	ft_splitfree(values);
 }

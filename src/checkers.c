@@ -43,6 +43,12 @@ void	check_colour_range(t_scene **scene)
 {
 	if (!(*scene)->is_valid)
 		return ;
+	if (!(*scene)->has_floor_rgb)
+		add_err(scene, MISS_INPUT_6);
+	if (!(*scene)->has_sky_rgb)
+		add_err(scene, MISS_INPUT_7);
+	if (!(*scene)->is_valid)
+		return ;
 	if ((*scene)->floor_r < 0 || (*scene)->floor_r > 255)
 		add_err(scene, COLOUR_ERR_1);
 	else if ((*scene)->floor_g < 0 || (*scene)->floor_g > 255)

@@ -23,6 +23,9 @@ cardinal direction\n"
 # define MISS_INPUT_2 "Floor rgb is invalid\n"
 # define MISS_INPUT_3 "Ceiling rgb is invalid\n"
 # define MISS_INPUT_4 "No player spawn given\n"
+# define MISS_INPUT_5 "Input file is empty\n"
+# define MISS_INPUT_6 "No floor rgb in input file\n"
+# define MISS_INPUT_7 "No sky rgb in input file\n"
 # define WEIRD_INPUT_1 "Colour line is invalid\n"
 # define WEIRD_INPUT_2 "Texture line is invalid\n"
 # define COLOUR_ERR_1 "Each rgb for ceiling and floor should be in the rgb \
@@ -64,6 +67,10 @@ void	read_and_validate_play_pos(t_scene **scene,
 			int pos, char *line, char p);
 int		has_more_than_one_player(char *line, int i);
 
+//reader3.c
+char	*validate_colour_or_text_line(t_scene **scene, char *line, int map_fd);
+int		read_rgb_colours(t_scene **scene, char **values, char colour);
+
 //are_they1.c
 int		is_valid_map_char(char c);
 int		is_config_line(char *line);
@@ -74,6 +81,8 @@ int		is_walkable(char c);
 //are_they2.c
 int		is_map_line(char *line);
 int		is_valid_line(char *line);
+int		is_valid_colour_line(char *line);
+int		is_valid_texture_line(char *line);
 
 //_debug.c
 void	print_wall_tex(t_wall_tex wall_tex);

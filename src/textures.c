@@ -32,7 +32,10 @@ int	load_texture(t_game *game, t_tex *tex, char *path)
 	tex->img = mlx_xpm_file_to_image(game->mlx, path,
 			&tex->width, &tex->height);
 	if (!tex->img)
+	{
+		write(STDERR_FILENO, "Error\nError loading texture file\n", 33);
 		return (0);
+	}
 	tex->addr = mlx_get_data_addr(tex->img,
 			&tex->bpp, &tex->lsize, &tex->endian);
 	return (1);
