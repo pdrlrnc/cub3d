@@ -46,6 +46,13 @@ TESTS = [
 	{"name":	"map33.cub",			"expected":		2},
 	{"name":	"map34.cub",			"expected":		0},
 	{"name":	"map35.cub",			"expected":		0},
+	{"name":	"map36.cub",			"expected":		2},
+	{"name":	"map37.cub",			"expected":		2},
+	{"name":	"map38.cub",			"expected":		6},
+	{"name":	"map39.cub",			"expected":		6},
+	{"name":	"map40.cub",			"expected":		2},
+	{"name":	"map41.cub",			"expected":		2},
+	{"name":	"map42.cub",			"expected":		2},
 ]
 
 class bcolors:
@@ -61,7 +68,7 @@ class bcolors:
 
 def main():
 	for i in TESTS:
-		res_code = call(["./cub3D", f".tests/{i['name']}"])
+		res_code = call(["./cub3D", f"tests/{i['name']}"])
 		if res_code == i["expected"]:
 			print(
 				f"{bcolors.BOLD}{i['name']}{bcolors.ENDC}",
