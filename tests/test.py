@@ -53,6 +53,7 @@ TESTS = [
 	{"name":	"map40.cub",			"expected":		2},
 	{"name":	"map41.cub",			"expected":		2},
 	{"name":	"map42.cub",			"expected":		2},
+	{"name":	"mapfolder.cub",		"expected":		2},
 ]
 
 class bcolors:
