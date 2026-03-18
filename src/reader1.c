@@ -17,7 +17,9 @@ void	read_input_values_to_list(t_scene **scene, int map_fd)
 	char	*line;
 
 	line = get_next_line(map_fd);
-	if (!line)
+	if (!line && errno == EISDIR)
+		add_err(scene, WEIRD_INPUT_3);
+	else if (!line)
 		add_err(scene, MISS_INPUT_5);
 	while (line)
 	{

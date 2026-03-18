@@ -24,8 +24,17 @@ t_scene	*validate_input(int argc, char**argv)
 		return (write(STDERR_FILENO, "Error\nMap must be *.cub\n", 24), NULL);
 	fd = open(argv[1], O_RDONLY);
 	if (fd < 0)
-		return (write(STDERR_FILENO,
-				"Error\nUnknown error opening map file\n", 37), NULL);
+	{
+		if (errno == EACCES)
+			return (write(STDERR_FILENO,
+					"Error\nNo permission for input file\n", 35), NULL);
+		if (errno == ENOENT)
+			return (write(STDERR_FILENO,
+					"Error\nInput file doesn't exist\n", 31), NULL);
+		else
+			return (write(STDERR_FILENO,
+					"Error\nUnknown error opening file\n", 33), NULL);
+	}
 	scene = get_bzeroed_scene();
 	return (validate_map(&(scene), fd));
 }
