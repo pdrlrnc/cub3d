@@ -23,6 +23,9 @@ int	hit(t_game *game, int pos_i_x, int pos_i_y)
 	rel_y = pos_i_y - game->cont2d.y1;
 	grid_x = rel_x / game->grid_size;
 	grid_y = rel_y / game->grid_size;
+	if (grid_x < 0 || grid_x >= game->scene->map_w
+		|| grid_y < 0 || grid_y >= game->scene->map_h)
+		return (1);
 	if (game->map2d[grid_y][grid_x].type == WALL
 		|| game->map2d[grid_y][grid_x].type == DOOR)
 		return (1);

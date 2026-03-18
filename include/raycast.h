@@ -251,7 +251,7 @@ int		can_move(t_game *game, double new_x, double new_y);
 void	move_up_down(t_game *game, double rad, double speed);
 void	move_right_left(t_game *game, double rad, double speed);
 
-int		_clean(t_game *game);
+int		_clean(t_game *game, int code);
 int		__exit(t_game *game, t_excode_enum code);
 
 t_tex	*get_wall_tex(t_game *game, t_ray *r);

@@ -12,7 +12,7 @@
 
 #include "cub3d.h"
 
-int	_clean(t_game *game)
+int	_clean(t_game *game, int code)
 {
 	int	y;
 
@@ -36,7 +36,7 @@ int	_clean(t_game *game)
 	mlx_destroy_display(game->mlx);
 	free(game->mlx);
 	free(game);
-	exit(0);
+	exit(code);
 	return (0);
 }
 
@@ -96,5 +96,5 @@ int	__exit(t_game *game, t_excode_enum code)
 	else if (code == INIT_MAP2D)
 		return (_clean_init_map2d(game));
 	else
-		return (_clean(game), code);
+		return (_clean(game, code), code);
 }

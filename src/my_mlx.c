@@ -35,6 +35,8 @@ void	_put_pixel(t_img *img, int x, int y, int color)
 {
 	char	*dst;
 
+	if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
+		return ;
 	dst = img->addr + (x * (img->bitspp / 8) + y * img->lsize);
 	*(unsigned int *)dst = color;
 }
