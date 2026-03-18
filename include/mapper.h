@@ -26,6 +26,7 @@ cardinal direction\n"
 # define MISS_INPUT_5 "Input file is empty\n"
 # define MISS_INPUT_6 "No floor rgb in input file\n"
 # define MISS_INPUT_7 "No sky rgb in input file\n"
+# define MISS_INPUT_8 "No map given\n"
 # define WEIRD_INPUT_1 "Colour line is invalid\n"
 # define WEIRD_INPUT_2 "Texture line is invalid\n"
 # define COLOUR_ERR_1 "Each rgb for ceiling and floor should be in the rgb \
@@ -109,11 +110,14 @@ void	check_colour_trim_ptr(t_scene *scene, char **res,
 //error_checker3.c
 void	check_line_trim_ptr(t_scene *scene, char *ptr, int fd);
 
-//checkers.c
+//checkers1.c
 void	check_colour_range(t_scene **scene);
 void	check_validity(t_scene **scene);
 void	check_validity(t_scene **scene);
 void	check_for_doors(t_scene **scene);
+
+//checkers2.c
+void	check_if_has_map(t_scene **scene, t_list *list);
 
 //stack.c
 t_point	*create_stack(int x, int y, int width, int height);

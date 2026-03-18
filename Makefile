@@ -16,7 +16,8 @@ SRC_FILES	= \
 	_debug \
 	are_they1 \
 	are_they2 \
-	checkers \
+	checkers1 \
+	checkers2 \
 	door_teleport \
 	error_checker1 \
 	error_checker2 \
@@ -54,7 +55,7 @@ LIBFT_DIR	= $(SRC_DIR)/libft
 LIBFT_A		= $(LIBFT_DIR)/libft.a
 
 CC			= cc
-CFLAGS			= -Wall -Wextra -Werror -I$(INC_DIR) -Iminilibx-linux
+CFLAGS			= -g -Wall -Wextra -Werror -I$(INC_DIR) -Iminilibx-linux
 RM			= rm -rf
 MOVE		= mv
 MAKE		= make --no-print-directory
