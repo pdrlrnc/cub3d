@@ -33,7 +33,7 @@ void	read_input_values_to_list(t_scene **scene, int map_fd)
 			(*scene)->input_list = ft_lstnew(ft_strdup(line));
 			check_inp_vals_ptr(*scene, (*scene)->input_list, map_fd);
 		}
-		else if (ft_strlen(line) > 1)
+		else
 			ft_lstadd_back(&(*scene)->input_list, ft_lstnew(ft_strdup(line)));
 		free(line);
 		line = get_next_line(map_fd);
